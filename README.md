@@ -1,3 +1,6 @@
+[![pipeline](https://gitlab.com/manzerbredes/chessarbiter/badges/main/pipeline.svg)](https://gitlab.com/manzerbredes/chessarbiter/-/commits/main)
+[![license](https://img.shields.io/badge/License-LGPL_v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
+
 # ChessArbiter
 ChessArbiter is a library that allow you to play chess games in C++. It ensures that all the rules of classical chess are followed.
 
