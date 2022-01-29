@@ -1,0 +1,103 @@
+#include "Piece.hpp"
+
+namespace chessarbiter {
+Piece::Piece(char c, std::string coord)
+    : piece(c), isBlack(!isupper(c)), coord(coord) {}
+
+std::vector<std::string> Piece::GetMoves() {
+  std::vector<std::string> moves;
+  char f = coord[0]; // File
+  char r = coord[1]; // Rank
+  if (piece == 'p' || piece == 'P') {
+    char side = 1;
+    if (piece == 'p') {
+      side = -1;
+    }
+    // First two steps
+    if ((r == '2' && piece == 'P') || (r == '7' && piece == 'p')) {
+      moves.push_back(std::string() + f + (char)(r + 2 * side));
+    }
+    if ((piece == 'P' && r < '8') || (piece == 'p' && r > '1')) {
+      moves.push_back(std::string() + f + (char)(r + 1 * side));
+    }
+    PIECE__ADD_MOVE(f - 1, r + 1 * side);
+    PIECE__ADD_MOVE(f + 1, r + 1 * side);
+  } else if (piece == 'k' || piece == 'K') {
+    PIECE__ADD_MOVE(f, r - 1);
+    PIECE__ADD_MOVE(f, r + 1);
+    PIECE__ADD_MOVE(f + 1, r);
+    PIECE__ADD_MOVE(f - 1, r);
+    PIECE__ADD_MOVE(f + 1, r + 1);
+    PIECE__ADD_MOVE(f - 1, r - 1);
+    PIECE__ADD_MOVE(f + 1, r - 1);
+    PIECE__ADD_MOVE(f - 1, r + 1);
+  } else if (piece == 'n' || piece == 'N') {
+    PIECE__ADD_MOVE(f + 1, r + 2);
+    PIECE__ADD_MOVE(f - 1, r + 2);
+    PIECE__ADD_MOVE(f + 1, r - 2);
+    PIECE__ADD_MOVE(f - 1, r - 2);
+    PIECE__ADD_MOVE(f + 2, r + 1);
+    PIECE__ADD_MOVE(f - 2, r + 1);
+    PIECE__ADD_MOVE(f + 2, r - 1);
+    PIECE__ADD_MOVE(f - 2, r - 1);
+  } else {
+    if (piece == 'b' || piece == 'B' || piece == 'Q' || piece == 'q') {
+      char rtmp = r;
+      char ftmp = f;
+      while (PIECE__IS_VALID(ftmp, rtmp)) {
+        ftmp++;
+        rtmp++;
+        PIECE__ADD_MOVE(ftmp, rtmp);
+      }
+      rtmp = r;
+      ftmp = f;
+      while (PIECE__IS_VALID(ftmp, rtmp)) {
+        ftmp--;
+        rtmp--;
+        PIECE__ADD_MOVE(ftmp, rtmp);
+      }
+      rtmp = r;
+      ftmp = f;
+      while (PIECE__IS_VALID(ftmp, rtmp)) {
+        ftmp--;
+        rtmp++;
+        PIECE__ADD_MOVE(ftmp, rtmp);
+      }
+      rtmp = r;
+      ftmp = f;
+      while (PIECE__IS_VALID(ftmp, rtmp)) {
+        ftmp++;
+        rtmp--;
+        PIECE__ADD_MOVE(ftmp, rtmp);
+      }
+    }
+    if (piece == 'r' || piece == 'R' || piece == 'Q' || piece == 'q') {
+      char rtmp = r;
+      char ftmp = f;
+      while (PIECE__IS_VALID(ftmp, rtmp)) {
+        rtmp++;
+        PIECE__ADD_MOVE(ftmp, rtmp);
+      }
+      rtmp = r;
+      ftmp = f;
+      while (PIECE__IS_VALID(ftmp, rtmp)) {
+        rtmp--;
+        PIECE__ADD_MOVE(ftmp, rtmp);
+      }
+      rtmp = r;
+      ftmp = f;
+      while (PIECE__IS_VALID(ftmp, rtmp)) {
+        ftmp++;
+        PIECE__ADD_MOVE(ftmp, rtmp);
+      }
+      rtmp = r;
+      ftmp = f;
+      while (PIECE__IS_VALID(ftmp, rtmp)) {
+        ftmp--;
+        PIECE__ADD_MOVE(ftmp, rtmp);
+      }
+    }
+  }
+  return (moves);
+}
+} // namespace chessarbiter
