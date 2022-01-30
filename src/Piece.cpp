@@ -20,81 +20,81 @@ std::vector<std::string> Piece::GetMoves() {
     if ((piece == 'P' && r < '8') || (piece == 'p' && r > '1')) {
       moves.push_back(std::string() + f + (char)(r + 1 * side));
     }
-    PIECE__ADD_MOVE(f - 1, r + 1 * side);
-    PIECE__ADD_MOVE(f + 1, r + 1 * side);
+    ADD_MOVE(f - 1, r + 1 * side);
+    ADD_MOVE(f + 1, r + 1 * side);
   } else if (piece == 'k' || piece == 'K') {
-    PIECE__ADD_MOVE(f, r - 1);
-    PIECE__ADD_MOVE(f, r + 1);
-    PIECE__ADD_MOVE(f + 1, r);
-    PIECE__ADD_MOVE(f - 1, r);
-    PIECE__ADD_MOVE(f + 1, r + 1);
-    PIECE__ADD_MOVE(f - 1, r - 1);
-    PIECE__ADD_MOVE(f + 1, r - 1);
-    PIECE__ADD_MOVE(f - 1, r + 1);
+    ADD_MOVE(f, r - 1);
+    ADD_MOVE(f, r + 1);
+    ADD_MOVE(f + 1, r);
+    ADD_MOVE(f - 1, r);
+    ADD_MOVE(f + 1, r + 1);
+    ADD_MOVE(f - 1, r - 1);
+    ADD_MOVE(f + 1, r - 1);
+    ADD_MOVE(f - 1, r + 1);
   } else if (piece == 'n' || piece == 'N') {
-    PIECE__ADD_MOVE(f + 1, r + 2);
-    PIECE__ADD_MOVE(f - 1, r + 2);
-    PIECE__ADD_MOVE(f + 1, r - 2);
-    PIECE__ADD_MOVE(f - 1, r - 2);
-    PIECE__ADD_MOVE(f + 2, r + 1);
-    PIECE__ADD_MOVE(f - 2, r + 1);
-    PIECE__ADD_MOVE(f + 2, r - 1);
-    PIECE__ADD_MOVE(f - 2, r - 1);
+    ADD_MOVE(f + 1, r + 2);
+    ADD_MOVE(f - 1, r + 2);
+    ADD_MOVE(f + 1, r - 2);
+    ADD_MOVE(f - 1, r - 2);
+    ADD_MOVE(f + 2, r + 1);
+    ADD_MOVE(f - 2, r + 1);
+    ADD_MOVE(f + 2, r - 1);
+    ADD_MOVE(f - 2, r - 1);
   } else {
     if (piece == 'b' || piece == 'B' || piece == 'Q' || piece == 'q') {
       char rtmp = r;
       char ftmp = f;
-      while (PIECE__IS_VALID(ftmp, rtmp)) {
+      while (IS_FR_VALID(ftmp, rtmp)) {
         ftmp++;
         rtmp++;
-        PIECE__ADD_MOVE(ftmp, rtmp);
+        ADD_MOVE(ftmp, rtmp);
       }
       rtmp = r;
       ftmp = f;
-      while (PIECE__IS_VALID(ftmp, rtmp)) {
+      while (IS_FR_VALID(ftmp, rtmp)) {
         ftmp--;
         rtmp--;
-        PIECE__ADD_MOVE(ftmp, rtmp);
+        ADD_MOVE(ftmp, rtmp);
       }
       rtmp = r;
       ftmp = f;
-      while (PIECE__IS_VALID(ftmp, rtmp)) {
+      while (IS_FR_VALID(ftmp, rtmp)) {
         ftmp--;
         rtmp++;
-        PIECE__ADD_MOVE(ftmp, rtmp);
+        ADD_MOVE(ftmp, rtmp);
       }
       rtmp = r;
       ftmp = f;
-      while (PIECE__IS_VALID(ftmp, rtmp)) {
+      while (IS_FR_VALID(ftmp, rtmp)) {
         ftmp++;
         rtmp--;
-        PIECE__ADD_MOVE(ftmp, rtmp);
+        ADD_MOVE(ftmp, rtmp);
       }
     }
     if (piece == 'r' || piece == 'R' || piece == 'Q' || piece == 'q') {
       char rtmp = r;
       char ftmp = f;
-      while (PIECE__IS_VALID(ftmp, rtmp)) {
+      while (IS_FR_VALID(ftmp, rtmp)) {
         rtmp++;
-        PIECE__ADD_MOVE(ftmp, rtmp);
+        ADD_MOVE(ftmp, rtmp);
       }
       rtmp = r;
       ftmp = f;
-      while (PIECE__IS_VALID(ftmp, rtmp)) {
+      while (IS_FR_VALID(ftmp, rtmp)) {
         rtmp--;
-        PIECE__ADD_MOVE(ftmp, rtmp);
+        ADD_MOVE(ftmp, rtmp);
       }
       rtmp = r;
       ftmp = f;
-      while (PIECE__IS_VALID(ftmp, rtmp)) {
+      while (IS_FR_VALID(ftmp, rtmp)) {
         ftmp++;
-        PIECE__ADD_MOVE(ftmp, rtmp);
+        ADD_MOVE(ftmp, rtmp);
       }
       rtmp = r;
       ftmp = f;
-      while (PIECE__IS_VALID(ftmp, rtmp)) {
+      while (IS_FR_VALID(ftmp, rtmp)) {
         ftmp--;
-        PIECE__ADD_MOVE(ftmp, rtmp);
+        ADD_MOVE(ftmp, rtmp);
       }
     }
   }

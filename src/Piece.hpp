@@ -1,10 +1,10 @@
 #include <string>
 #include <vector>
 
-#define PIECE__IS_VALID(f, r) ((f) >= 'a' && (f) <= 'h' && (r) >= '1' && (r) <= '8')
-#define PIECE__ADD_MOVE(f, r)                                                         \
+#define IS_FR_VALID(f, r) ((f) >= 'a' && (f) <= 'h' && (r) >= '1' && (r) <= '8')
+#define ADD_MOVE(f, r)                                                         \
   {                                                                            \
-    if (PIECE__IS_VALID(f, r)) {                                                      \
+    if (IS_FR_VALID(f, r)) {                                                      \
       moves.push_back(std::string() + (char)((f)) + (char)((r)));              \
     }                                                                          \
   }
