@@ -5,7 +5,7 @@ namespace chessarbiter {
 std::string FENParser::normalize_rank(std::string fen_rank) {
   std::string normalized;
   for (char &c : fen_rank) {
-    if (FEN__IS_DIGIT(c)) {
+    if (IS_DIGIT(c)) {
       for (char i = 0; i < (c - '0'); i++) {
         normalized += ' ';
       }
@@ -28,7 +28,7 @@ std::string FENParser::normalize_rank(std::string fen_rank) {
 }
 
 char FENParser::NextToken(std::string fen, char loc) {
-  while (loc < fen.size() && FEN__IS_BLANK(fen[loc])) {
+  while (loc < fen.size() && IS_BLANK(fen[loc])) {
     loc++;
   }
   return (loc);
@@ -110,7 +110,7 @@ FEN FENParser::Parse(std::string fen) {
   // Parse board
   char loc = 0;
   for (char rank = 0; rank < 8; rank++) {
-    FEN__CHECK_LOC();
+    CHECK_LOC();
     char newloc = NextRank(fen, loc);
     parsed.board += normalize_rank(fen.substr(loc, newloc - loc));
     loc = newloc + 1;
@@ -122,16 +122,16 @@ FEN FENParser::Parse(std::string fen) {
     throw InvalidFEN();
   }
   parsed.player = fen[loc] == 'b';
-  FEN__CHECK_LOC();
+  CHECK_LOC();
 
   // Parse castling
   loc = NextToken(fen, loc + 1);
   char length = 0;
   char cur_loc = loc;
-  while (!FEN__IS_BLANK(fen[cur_loc])) {
+  while (!IS_BLANK(fen[cur_loc])) {
     length++;
     cur_loc++;
-    FEN__CHECK_LOC();
+    CHECK_LOC();
   }
   parsed.white_castle_short = false;
   parsed.white_castle_long = false;
@@ -172,29 +172,29 @@ FEN FENParser::Parse(std::string fen) {
     }
   }
   loc++;
-  FEN__CHECK_LOC();
+  CHECK_LOC();
 
   // Parse half move counter
   loc = NextToken(fen, loc);
   std::string halfmove;
-  while (!FEN__IS_BLANK(fen[loc])) {
-    if (!FEN__IS_DIGIT(fen[loc])) {
+  while (!IS_BLANK(fen[loc])) {
+    if (!IS_DIGIT(fen[loc])) {
       throw InvalidFEN();
     }
     halfmove += fen[loc];
     loc++;
-    FEN__CHECK_LOC();
+    CHECK_LOC();
   }
   parsed.halfmove = stoi(halfmove);
 
   // Parse move counter
   loc = NextToken(fen, loc);
   std::string move;
-  while (loc < fen.size() && !FEN__IS_BLANK(fen[loc])) {
-    if (!FEN__IS_DIGIT(fen[loc])) {
+  while (loc < fen.size() && !IS_BLANK(fen[loc])) {
+    if (!IS_DIGIT(fen[loc])) {
       throw InvalidFEN();
     }
-    FEN__CHECK_LOC();
+    CHECK_LOC();
     move += fen[loc];
     loc++;
   }

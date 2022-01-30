@@ -133,7 +133,6 @@ bool ChessArbiter::IsAttacked(std::string square, bool by) {
   for (std::string &m : moves) {
     std::string src = m.substr(0, 2);
     std::string dst = m.substr(2, 2);
-
     if (dst == square) {
       // Pawn do not attack forward
       Piece p = board.GetPieceAt(src);

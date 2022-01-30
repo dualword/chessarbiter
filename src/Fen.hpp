@@ -2,11 +2,11 @@
 #include <sstream>
 #include <string>
 
-#define FEN__IS_DIGIT(c)                                                            \
+#define IS_DIGIT(c)                                                            \
   (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' ||     \
    c == '6' || c == '7' || c == '8' || c == '9')
-#define FEN__IS_BLANK(c) (c == ' ' || c == '\n' || c == '\t' || c == '\r')
-#define FEN__CHECK_LOC() {if(loc>=fen.size()){throw InvalidFEN();}}
+#define IS_BLANK(c) (c == ' ' || c == '\n' || c == '\t' || c == '\r')
+#define CHECK_LOC() {if(loc>=fen.size()){throw InvalidFEN();}}
 
 namespace chessarbiter {
 
