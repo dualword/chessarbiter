@@ -5,19 +5,30 @@ namespace chessarbiter {
 std::string FENParser::normalize_rank(std::string fen_rank) {
   std::string normalized;
   for (char &c : fen_rank) {
-    if (IS_DIGIT(c)) {
+    if (FEN__IS_DIGIT(c)) {
       for (char i = 0; i < (c - '0'); i++) {
         normalized += ' ';
       }
     } else {
+      // Check validity
+      char c2 = std::tolower(c);
+      if (!(c2 == 'p' || c2 == 'r' || c2 == 'n' || c2 == 'b' || c2 == 'q' ||
+            c2 == 'k' || c2 == ' ')) {
+        throw InvalidFEN();
+      }
+      // Add
       normalized += c;
     }
+  }
+  // Check validity
+  if (normalized.size() != 8) {
+    throw InvalidFEN();
   }
   return (normalized);
 }
 
 char FENParser::NextToken(std::string fen, char loc) {
-  while (loc < fen.size() && IS_BLANK(fen[loc])) {
+  while (loc < fen.size() && FEN__IS_BLANK(fen[loc])) {
     loc++;
   }
   return (loc);
@@ -99,6 +110,7 @@ FEN FENParser::Parse(std::string fen) {
   // Parse board
   char loc = 0;
   for (char rank = 0; rank < 8; rank++) {
+    FEN__CHECK_LOC();
     char newloc = NextRank(fen, loc);
     parsed.board += normalize_rank(fen.substr(loc, newloc - loc));
     loc = newloc + 1;
@@ -106,15 +118,20 @@ FEN FENParser::Parse(std::string fen) {
 
   // Parse player to move
   loc = NextToken(fen, loc);
+  if (!(fen[loc] == 'w' || fen[loc] == 'b')) {
+    throw InvalidFEN();
+  }
   parsed.player = fen[loc] == 'b';
+  FEN__CHECK_LOC();
 
   // Parse castling
   loc = NextToken(fen, loc + 1);
   char length = 0;
   char cur_loc = loc;
-  while (!IS_BLANK(fen[cur_loc])) {
+  while (!FEN__IS_BLANK(fen[cur_loc])) {
     length++;
     cur_loc++;
+    FEN__CHECK_LOC();
   }
   parsed.white_castle_short = false;
   parsed.white_castle_long = false;
@@ -135,6 +152,10 @@ FEN FENParser::Parse(std::string fen) {
     case 'q':
       parsed.black_castle_long = true;
       break;
+    case '-':
+      break;
+    default:
+      throw InvalidFEN();
     }
   }
 
@@ -143,22 +164,37 @@ FEN FENParser::Parse(std::string fen) {
   if (fen[loc] != '-') {
     parsed.en_passant = fen.substr(loc, 2);
     loc++;
+    // Check format
+    char f = parsed.en_passant[0];
+    char r = parsed.en_passant[1];
+    if (!((f >= 'a' && f <= 'h') && (r >= '1' && r <= '8'))) {
+      throw InvalidFEN();
+    }
   }
   loc++;
+  FEN__CHECK_LOC();
 
   // Parse half move counter
   loc = NextToken(fen, loc);
   std::string halfmove;
-  while (!IS_BLANK(fen[loc])) {
+  while (!FEN__IS_BLANK(fen[loc])) {
+    if (!FEN__IS_DIGIT(fen[loc])) {
+      throw InvalidFEN();
+    }
     halfmove += fen[loc];
     loc++;
+    FEN__CHECK_LOC();
   }
   parsed.halfmove = stoi(halfmove);
 
   // Parse move counter
   loc = NextToken(fen, loc);
   std::string move;
-  while (loc < fen.size() && !IS_BLANK(fen[loc])) {
+  while (loc < fen.size() && !FEN__IS_BLANK(fen[loc])) {
+    if (!FEN__IS_DIGIT(fen[loc])) {
+      throw InvalidFEN();
+    }
+    FEN__CHECK_LOC();
     move += fen[loc];
     loc++;
   }

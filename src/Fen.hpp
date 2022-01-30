@@ -2,10 +2,11 @@
 #include <sstream>
 #include <string>
 
-#define IS_DIGIT(c)                                                            \
+#define FEN__IS_DIGIT(c)                                                            \
   (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' ||     \
    c == '6' || c == '7' || c == '8' || c == '9')
-#define IS_BLANK(c) (c == ' ' || c == '\n' || c == '\t' || c == '\r')
+#define FEN__IS_BLANK(c) (c == ' ' || c == '\n' || c == '\t' || c == '\r')
+#define FEN__CHECK_LOC() {if(loc>=fen.size()){throw InvalidFEN();}}
 
 namespace chessarbiter {
 
@@ -33,9 +34,13 @@ private:
   static char NextRank(std::string fen, char loc);
 
 public:
-  /// @brief Parse a FEN from a string
+  /// @brief Parse a FEN from a string (can throw InvalidFEN)
   static FEN Parse(std::string);
   /// @brief Generate a fen string from the FEN object
   static std::string Serialize(FEN fen);
+};
+
+struct InvalidFEN : public std::exception {
+  const char *what() const throw() { return "No piece found"; }
 };
 } // namespace chessarbiter

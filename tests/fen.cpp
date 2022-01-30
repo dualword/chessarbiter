@@ -3,48 +3,36 @@
 
 using namespace chessarbiter;
 
-TEST_CASE("Serializer", "[fen/serialize]") {
-  FEN f;
-  f.board = "p    p p"
-            "p      p"
-            "        "
-            "QQQQQQQQ"
-            "kpkpkpkp"
-            "        "
-            "p p r b "
-            "       R";
-  REQUIRE(FENParser::Serialize(f) ==
-          "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R w KQkq - 0 1");
-
-  f.white_castle_short = false;
-  f.white_castle_long = false;
-  f.black_castle_short = false;
-  f.black_castle_long = false;
-  REQUIRE(FENParser::Serialize(f) ==
-          "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R w - - 0 1");
-
-  f.en_passant = "a3";
-  REQUIRE(FENParser::Serialize(f) ==
-          "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R w - a3 0 1");
-
-  f.player = true;
-  REQUIRE(FENParser::Serialize(f) ==
-          "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R b - a3 0 1");
-
-  f.halfmove = 5;
-  REQUIRE(FENParser::Serialize(f) ==
-          "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R b - a3 5 1");
-
-  f.move = 5;
-  REQUIRE(FENParser::Serialize(f) ==
-          "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R b - a3 5 5");
-}
-
 TEST_CASE("Parse", "[fen/parse]") {
   FEN f;
+  // Start game FEN
+  REQUIRE_NOTHROW(FENParser::Parse(
+      "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"));
+
+  // Throw tests
+  REQUIRE_THROWS_AS(
+      FENParser::Parse(
+          "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR z KQkq - 0 1"),
+      InvalidFEN);
+  REQUIRE_THROWS_AS(
+      FENParser::Parse(
+          "rnbqkbnr/ppppppp2/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"),
+      InvalidFEN);
+  REQUIRE_THROWS_AS(
+      FENParser::Parse(
+          "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w pQkq - 0 1"),
+      InvalidFEN);
+  REQUIRE_THROWS_AS(
+      FENParser::Parse("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP w KQkq - 0 1"),
+      InvalidFEN);
+  REQUIRE_THROWS_AS(
+      FENParser::Parse(
+          "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 1a 1"),
+      InvalidFEN);
+
+  // Tests
   f = FENParser::Parse(
       "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R b - a3 5 5");
-
   REQUIRE(f.board == "p    p p"
                      "p      p"
                      "        "
@@ -88,4 +76,41 @@ TEST_CASE("Parse", "[fen/parse]") {
   CHECK(f.white_castle_long == true);
   CHECK(f.black_castle_short == true);
   CHECK(f.black_castle_long == true);
+}
+
+TEST_CASE("Serializer", "[fen/serialize]") {
+  FEN f;
+  f.board = "p    p p"
+            "p      p"
+            "        "
+            "QQQQQQQQ"
+            "kpkpkpkp"
+            "        "
+            "p p r b "
+            "       R";
+  REQUIRE(FENParser::Serialize(f) ==
+          "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R w KQkq - 0 1");
+
+  f.white_castle_short = false;
+  f.white_castle_long = false;
+  f.black_castle_short = false;
+  f.black_castle_long = false;
+  REQUIRE(FENParser::Serialize(f) ==
+          "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R w - - 0 1");
+
+  f.en_passant = "a3";
+  REQUIRE(FENParser::Serialize(f) ==
+          "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R w - a3 0 1");
+
+  f.player = true;
+  REQUIRE(FENParser::Serialize(f) ==
+          "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R b - a3 0 1");
+
+  f.halfmove = 5;
+  REQUIRE(FENParser::Serialize(f) ==
+          "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R b - a3 5 1");
+
+  f.move = 5;
+  REQUIRE(FENParser::Serialize(f) ==
+          "p4p1p/p6p/8/QQQQQQQQ/kpkpkpkp/8/p1p1r1b1/7R b - a3 5 5");
 }
