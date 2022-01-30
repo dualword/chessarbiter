@@ -300,3 +300,61 @@ TEST_CASE("IsCheckmate", "[chessarbiter/IsCheckmate]") {
   CHECK(a.GetFEN() ==
         "r3qbr1/p1p1pkp1/1p2p1p1/8/8/8/PPPPP1PP/RNBQ1RK1 b - - 1 1");
 }
+
+TEST_CASE("IsDrawByFiftyMoveRule", "[chessarbiter/IsDrawByFiftyMoveRule]") {
+  ChessArbiter a;
+  a.Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+  CHECK_FALSE(a.IsDrawByFiftyMoveRule());
+
+  a.Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 99 1");
+  CHECK_FALSE(a.IsDrawByFiftyMoveRule());
+  a.Play("b1c3");
+  CHECK(a.IsDrawByFiftyMoveRule());
+
+  a.Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 100 1");
+  CHECK(a.IsDrawByFiftyMoveRule());
+}
+
+TEST_CASE("IsDrawByNoMoves", "[chessarbiter/IsDrawByNoMoves]") {
+  ChessArbiter a;
+
+  // No move for black
+  a.Setup("8/8/8/8/8/8/5K1p/7k b - - 0 1");
+  CHECK(a.IsDrawByNoMoves());
+
+  // But move for white
+  a.Setup("8/8/8/8/8/8/5K1p/7k w - - 0 1");
+  CHECK_FALSE(a.IsDrawByNoMoves());
+
+  // No move for white
+  a.Setup("8/8/7r/2K5/b7/2k5/6q1/8 w - - 0 1");
+  CHECK(a.IsDrawByNoMoves());
+
+  // But move for black
+  a.Setup("8/8/7r/2K5/b7/2k5/6q1/8 b - - 0 1");
+  CHECK_FALSE(a.IsDrawByNoMoves());
+}
+
+TEST_CASE("IsDrawByRepetitions", "[chessarbiter/IsDrawByRepetitions]") {
+  ChessArbiter a;
+  // One time
+  a.Setup("8/3kp3/8/8/4P3/3K4/8/8 w - - 0 1");
+
+  a.Play("d3d4");
+  a.Play("d7d6");
+  CHECK_FALSE(a.IsDrawByRepetitions());
+
+  // Two time
+  a.Play("d4d3");
+  a.Play("d6d7");
+  CHECK_FALSE(a.IsDrawByRepetitions());
+
+  a.Play("d3d4");
+  a.Play("d7d6");
+  CHECK_FALSE(a.IsDrawByRepetitions());
+
+  // Three time
+  a.Play("d4d3");
+  a.Play("d6d7");
+  CHECK(a.IsDrawByRepetitions());
+}

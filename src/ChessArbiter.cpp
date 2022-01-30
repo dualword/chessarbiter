@@ -5,8 +5,10 @@ ChessArbiter::ChessArbiter()
     : wPawn(1), wRook(5), wKnight(3), wBishop(3), wQueen(9), wKing(0) {}
 
 void ChessArbiter::Setup(std::string fen) {
+  positions.clear();
   SetFEN(fen);
   fen_last = this->fen;
+  positions[this->fen.board] = 1;
 }
 
 void ChessArbiter::SetFEN(FEN fen) { SetFEN(FENParser::Serialize(fen)); }
@@ -112,6 +114,13 @@ bool ChessArbiter::Play(std::string move) {
     if (IsCheck(!fen.player)) {
       SetFEN(fen_last);
       return (false);
+    }
+
+    // Update position map (repetitions draw)
+    if (positions.count(fen.board) == 0) {
+      positions[fen.board] = 1;
+    } else {
+      positions[fen.board] += 1;
     }
 
     return (true);
@@ -292,16 +301,48 @@ bool ChessArbiter::IsPlayable() {
   return (false);
 }
 
+bool ChessArbiter::IsDrawByFiftyMoveRule() { return (fen.halfmove >= 100); }
+
+bool ChessArbiter::IsDrawByNoMoves() {
+  if (!IsCheck(fen.player)) {
+    std::vector<std::string> moves = ListLegalMoves(fen.player);
+    for (std::string &move : moves) {
+      if (Play(move)) {
+        positions[fen.board]--; // If move work, remove its position
+        SetFEN(fen_last);
+        return (false);
+      }
+    }
+    return (true);
+  }
+  return (false);
+}
+
+bool ChessArbiter::IsDrawByRepetitions() {
+  for (auto const &[key, val] : positions) {
+    if (val >= 3) {
+      return (true);
+    }
+  }
+  return (false);
+}
+
+bool ChessArbiter::IsDraw() {
+  return (IsDrawByFiftyMoveRule() || IsDrawByNoMoves() ||
+          IsDrawByRepetitions());
+}
+
 bool ChessArbiter::IsCheckMate() {
   if (IsCheck(fen.player)) {
     std::vector<std::string> moves = ListLegalMoves(fen.player);
-    for(std::string &move: moves){
-      if(Play(move)){
+    for (std::string &move : moves) {
+      if (Play(move)) {
+        positions[fen.board]--; // If move work, remove its position
         SetFEN(fen_last);
-        return(false);
+        return (false);
       }
     }
-    return(true);
+    return (true);
   }
   return (false);
 }

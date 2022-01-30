@@ -74,14 +74,11 @@ std::string Board::GetKingLocation(bool isBlack) {
 void Board::Move(std::string move) {
   std::string src(move.substr(0, 2));
   std::string dst(move.substr(2, 2));
-  if (!IsEmpty(src)) {
-    if (!IsEmpty(dst)) {
-      RemovePiece(dst);
-    }
-    for (Piece &p : pieces) {
-      if (p.coord == src) {
-        p.coord = dst;
-      }
+  for (Piece &p : pieces) {
+    if (p.coord == src) {
+      RemovePiece(dst); // Remove piece on dst if exists
+      p.coord = dst;
+      break;
     }
   }
 }
@@ -116,6 +113,9 @@ bool Board::IsMovePossible(std::string move) {
   }
 
   // Check colors on dst square
+  // Seems that checking that is empty
+  // instead of catching NoPieceFound exception is
+  // more performant
   if (!IsEmpty(dst)) {
     Piece dstp = GetPieceAt(dst);
     if (srcp.isBlack == dstp.isBlack)

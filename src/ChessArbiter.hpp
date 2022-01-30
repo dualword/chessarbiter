@@ -1,6 +1,7 @@
 #include "Board.hpp"
 #include "Fen.hpp"
 #include <iostream>
+#include <unordered_map>
 
 namespace chessarbiter {
 class ChessArbiter {
@@ -8,12 +9,15 @@ class ChessArbiter {
   FEN fen;
   FEN fen_last; // To undo a move
   int wPawn, wRook, wKnight, wBishop, wQueen, wKing;
+  /// @brief Use to compute occurences of positions
+  std::unordered_map<std::string, char> positions;
+  /// @brief FEN methods used internally
+  void SetFEN(std::string);
+  void SetFEN(FEN);
 
 public:
   ChessArbiter();
   void Setup(std::string);
-  void SetFEN(std::string);
-  void SetFEN(FEN);
   std::string GetFEN();
   /// @brief Check which player is going to play
   bool IsBlackTurn();
@@ -27,7 +31,7 @@ public:
   std::string GetBoard();
   /// @brief Get current position evaluation according to player's material
   int GetMaterialScore();
-  /// @brief Check if position is legal
+  /// @brief Check if position is legal to be played
   bool IsPlayable();
   /// @brief Get pieces captures by a player
   std::string GetCaptures(bool);
@@ -36,5 +40,10 @@ public:
   /// @brief Check if a specific castle is possible by a player
   bool IsCastlePossible(bool, bool);
   bool IsCheckMate();
+  /// @brief Draws check
+  bool IsDrawByFiftyMoveRule();
+  bool IsDrawByNoMoves();
+  bool IsDrawByRepetitions();
+  bool IsDraw();
 };
 } // namespace chessarbiter
