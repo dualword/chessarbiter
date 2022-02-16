@@ -358,3 +358,13 @@ TEST_CASE("IsDrawByRepetitions", "[chessarbiter/IsDrawByRepetitions]") {
   a.Play("d6d7");
   CHECK(a.IsDrawByRepetitions());
 }
+
+TEST_CASE("SimpleCapture", "[SimplePieceCapture]") {
+  ChessArbiter a;
+  a.Setup("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2");
+
+  // Ensure capture works
+  a.Play("e4d5");
+  CHECK(a.GetFEN() ==
+        "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2");
+}

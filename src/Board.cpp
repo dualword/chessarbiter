@@ -74,9 +74,9 @@ std::string Board::GetKingLocation(bool isBlack) {
 void Board::Move(std::string move) {
   std::string src = move.substr(0, 2);
   std::string dst = move.substr(2, 2);
+  RemovePiece(dst); // Remove piece on dst if exists
   for (Piece &p : pieces) {
     if (p.coord == src) {
-      RemovePiece(dst); // Remove piece on dst if exists
       p.coord = dst;
       break;
     }
