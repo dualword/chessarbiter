@@ -30,7 +30,7 @@ class ChessArbiter {
   void SetFEN(std::string);
   void SetFEN(FEN);
   std::string SAN, SAN_last;
-  char capture, capture_last;
+  char capture;
 
 public:
   ChessArbiter();

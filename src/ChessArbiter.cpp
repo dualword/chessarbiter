@@ -3,7 +3,7 @@
 namespace chessarbiter {
 ChessArbiter::ChessArbiter()
     : wPawn(1), wRook(5), wKnight(3), wBishop(3), wQueen(9), wKing(0), SAN(""),
-      capture(' '), capture_last(' ') {}
+      capture(' '){}
 
 void ChessArbiter::Setup(std::string fen) {
   positions.clear();
@@ -47,6 +47,7 @@ bool ChessArbiter::Play(std::string move) {
     FEN newFen = fen;
     INIT_BACKUP();
     SAN = "";
+    capture=' ';
 
     if (IsCapture) {
       capture = board.GetPieceAt(dst).piece;
