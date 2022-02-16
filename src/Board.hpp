@@ -22,6 +22,8 @@ public:
   std::vector<Piece> GetPlayerPieces(bool);
   /// @brief Count the number of a specific piece on the board
   short CountPiece(char);
+  /// @brief Return true if at most 1 similar piece can go to move_dst
+  bool IsPieceMoveUnique(char piece, std::string move_dst);
   /// @brief Get the location of the first king found on the board
   std::string GetKingLocation(bool);
   /// @brief Check if a move is technically possible (does not means it is

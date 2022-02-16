@@ -83,6 +83,20 @@ void Board::Move(std::string move) {
   }
 }
 
+bool Board::IsPieceMoveUnique(char piece, std::string move_dst) {
+  bool isBlack = std::islower(piece);
+  unsigned char count = 0;
+  for (std::string &move : ListPossibleMoves(isBlack)) {
+    std::string src = move.substr(0, 2);
+    std::string dst = move.substr(2, 2);
+    Piece p = GetPieceAt(src); // Never fails since it is legal
+    if (p.piece == piece && move_dst == dst) {
+      count++;
+    }
+  }
+  return (count <= 1);
+}
+
 std::string Board::Serialize() {
   std::string s;
   for (short i = 0; i < 8; i++) {

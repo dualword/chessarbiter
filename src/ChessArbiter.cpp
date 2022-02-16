@@ -2,7 +2,8 @@
 
 namespace chessarbiter {
 ChessArbiter::ChessArbiter()
-    : wPawn(1), wRook(5), wKnight(3), wBishop(3), wQueen(9), wKing(0) {}
+    : wPawn(1), wRook(5), wKnight(3), wBishop(3), wQueen(9), wKing(0), SAN("") {
+}
 
 void ChessArbiter::Setup(std::string fen) {
   positions.clear();
@@ -45,6 +46,8 @@ bool ChessArbiter::Play(std::string move) {
     std::string dst = move.substr(2, 2);
     bool IsCapture = !board.IsEmpty(dst);
     FEN newFen = fen;
+    SAN_last = SAN;
+    SAN = "";
 
     // Perform the move
     if (move == "O-O" || move == "O-O-O") {
@@ -61,7 +64,31 @@ bool ChessArbiter::Play(std::string move) {
         board.Move("e1c1");
         board.Move("a1d1");
       }
+      SAN = move;
     } else {
+      // Update SAN move
+      if (moved.piece == 'p' || moved.piece == 'P') {
+        if (IsCapture) {
+          SAN = src[0];
+          SAN += "x" + dst;
+        } else {
+          SAN = dst;
+        }
+      } else {
+        SAN = std::toupper(moved.piece);
+        if (!board.IsPieceMoveUnique(moved.piece, dst)) {
+          if (src[0] == dst[0]) {
+            SAN += src[1];
+          } else {
+            SAN += src[0];
+          }
+        }
+        if (IsCapture) {
+          SAN += "x";
+        }
+        SAN += dst;
+      }
+      // Perform the move
       board.Move(move);
     }
 
@@ -113,6 +140,7 @@ bool ChessArbiter::Play(std::string move) {
     // Check for illegal move
     if (IsCheck(!fen.player)) {
       SetFEN(fen_last);
+      SAN = SAN_last;
       return (false);
     }
 
@@ -309,6 +337,7 @@ bool ChessArbiter::IsDrawByNoMoves() {
       if (Play(move)) {
         positions[fen.board]--; // If move work, remove its position
         SetFEN(fen_last);
+        SAN = SAN_last;
         return (false);
       }
     }
@@ -338,6 +367,7 @@ bool ChessArbiter::IsCheckMate() {
       if (Play(move)) {
         positions[fen.board]--; // If move work, remove its position
         SetFEN(fen_last);
+        SAN = SAN_last;
         return (false);
       }
     }
@@ -345,5 +375,7 @@ bool ChessArbiter::IsCheckMate() {
   }
   return (false);
 }
+
+std::string ChessArbiter::GetSAN() { return (SAN); }
 
 } // namespace chessarbiter

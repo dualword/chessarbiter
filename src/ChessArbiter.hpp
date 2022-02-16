@@ -15,7 +15,7 @@ class ChessArbiter {
   /// @brief FEN methods used internally
   void SetFEN(std::string);
   void SetFEN(FEN);
-
+  std::string SAN,SAN_last;
 public:
   ChessArbiter();
   void Setup(std::string);
@@ -36,6 +36,8 @@ public:
   bool IsPlayable();
   /// @brief Get pieces captures by a player
   std::string GetCaptures(bool);
+  /// @brief Get the english SAN format of the last move
+  std::string GetSAN();
   /// @brief List all the legal moves of a player
   std::vector<std::string> ListLegalMoves(bool);
   /// @brief Check if a specific castle is possible by a player

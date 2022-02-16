@@ -416,3 +416,15 @@ TEST_CASE("Serialize", "[board/Serialize]") {
                          "P       ");
 }
 
+TEST_CASE("IsPieceMoveUnique", "[board/IsPieceMoveUnique]") {
+  Board b;
+  b.AddPiece('N', "a1");
+  b.AddPiece('n', "c1");
+
+  CHECK(b.IsPieceMoveUnique('n', "b3"));
+  CHECK(b.IsPieceMoveUnique('N', "b3"));
+
+  b.AddPiece('N', "d2");
+  CHECK(b.IsPieceMoveUnique('n', "b3"));
+  CHECK_FALSE(b.IsPieceMoveUnique('N', "b3"));
+}
