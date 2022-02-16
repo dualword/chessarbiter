@@ -4,18 +4,34 @@
 #include <iostream>
 #include <unordered_map>
 
+#define INIT_BACKUP()                                                          \
+  FEN fen_backup = fen;                                                        \
+  char positions_backup = 0;                                                   \
+  if (positions.find(fen.board) != positions.end())                            \
+    positions_backup = positions[fen.board];                                   \
+  std::string SAN_backup = SAN;                                                \
+  char capture_backup = capture;
+
+#define RESTORE_BACKUP()                                                       \
+  SetFEN(fen_backup);                                                          \
+  if (positions_backup != 0)                                                   \
+    positions[fen.board] = positions_backup;                                   \
+  SAN = SAN_backup;                                                            \
+  capture = capture_backup;
+
 namespace chessarbiter {
 class ChessArbiter {
   Board board;
   FEN fen;
-  FEN fen_last; // To undo a move
   int wPawn, wRook, wKnight, wBishop, wQueen, wKing;
   /// @brief Use to compute occurences of positions
   std::unordered_map<std::string, char> positions;
   /// @brief FEN methods used internally
   void SetFEN(std::string);
   void SetFEN(FEN);
-  std::string SAN,SAN_last;
+  std::string SAN, SAN_last;
+  char capture, capture_last;
+
 public:
   ChessArbiter();
   void Setup(std::string);
@@ -36,6 +52,7 @@ public:
   bool IsPlayable();
   /// @brief Get pieces captures by a player
   std::string GetCaptures(bool);
+  char GetCapture();
   /// @brief Get the english SAN format of the last move
   std::string GetSAN();
   /// @brief List all the legal moves of a player

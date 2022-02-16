@@ -2,13 +2,12 @@
 
 namespace chessarbiter {
 ChessArbiter::ChessArbiter()
-    : wPawn(1), wRook(5), wKnight(3), wBishop(3), wQueen(9), wKing(0), SAN("") {
-}
+    : wPawn(1), wRook(5), wKnight(3), wBishop(3), wQueen(9), wKing(0), SAN(""),
+      capture(' '), capture_last(' ') {}
 
 void ChessArbiter::Setup(std::string fen) {
   positions.clear();
   SetFEN(fen);
-  fen_last = this->fen;
   positions[this->fen.board] = 1;
 }
 
@@ -46,8 +45,12 @@ bool ChessArbiter::Play(std::string move) {
     std::string dst = move.substr(2, 2);
     bool IsCapture = !board.IsEmpty(dst);
     FEN newFen = fen;
-    SAN_last = SAN;
+    INIT_BACKUP();
     SAN = "";
+
+    if (IsCapture) {
+      capture = board.GetPieceAt(dst).piece;
+    }
 
     // Perform the move
     if (move == "O-O" || move == "O-O-O") {
@@ -134,13 +137,11 @@ bool ChessArbiter::Play(std::string move) {
     }
 
     // Update fen!
-    fen_last = fen;
     fen = newFen;
 
     // Check for illegal move
     if (IsCheck(!fen.player)) {
-      SetFEN(fen_last);
-      SAN = SAN_last;
+      RESTORE_BACKUP();
       return (false);
     }
 
@@ -334,10 +335,9 @@ bool ChessArbiter::IsDrawByNoMoves() {
   if (!IsCheck(fen.player)) {
     std::vector<std::string> moves = ListLegalMoves(fen.player);
     for (std::string &move : moves) {
+      INIT_BACKUP();
       if (Play(move)) {
-        positions[fen.board]--; // If move work, remove its position
-        SetFEN(fen_last);
-        SAN = SAN_last;
+        RESTORE_BACKUP();
         return (false);
       }
     }
@@ -364,10 +364,9 @@ bool ChessArbiter::IsCheckMate() {
   if (IsCheck(fen.player)) {
     std::vector<std::string> moves = ListLegalMoves(fen.player);
     for (std::string &move : moves) {
+      INIT_BACKUP();
       if (Play(move)) {
-        positions[fen.board]--; // If move work, remove its position
-        SetFEN(fen_last);
-        SAN = SAN_last;
+        RESTORE_BACKUP();
         return (false);
       }
     }
@@ -377,5 +376,5 @@ bool ChessArbiter::IsCheckMate() {
 }
 
 std::string ChessArbiter::GetSAN() { return (SAN); }
-
+char ChessArbiter::GetCapture() { return (capture); }
 } // namespace chessarbiter

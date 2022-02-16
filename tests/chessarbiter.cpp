@@ -367,4 +367,5 @@ TEST_CASE("SimpleCapture", "[SimplePieceCapture]") {
   a.Play("e4d5");
   CHECK(a.GetFEN() ==
         "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2");
+  CHECK(a.GetCapture()=='p');
 }
