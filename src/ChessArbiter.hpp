@@ -1,3 +1,4 @@
+#pragma once
 #include "Board.hpp"
 #include "Fen.hpp"
 #include <iostream>
