@@ -180,43 +180,43 @@ TEST_CASE("ListLegalMoves", "[chessarbiter/ListLegalMoves]") {
   a.Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK11R w KQkq - 0 1");
   moves = a.ListLegalMoves(false);
   REQUIRE(moves.size() == 22);
-  CHECK(std::find(moves.begin(), moves.end(), "O-O") != moves.end());
+  CHECK(std::find(moves.begin(), moves.end(), "e1g1") != moves.end());
 
   // White Short Castle impossible
   a.Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK11R w Qkq - 0 1");
   moves = a.ListLegalMoves(false);
-  CHECK_FALSE(std::find(moves.begin(), moves.end(), "O-O") != moves.end());
+  CHECK_FALSE(std::find(moves.begin(), moves.end(), "e1g1") != moves.end());
 
   // White Short Castle impossible 2
   a.Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQK1NR w KQkq - 0 1");
   moves = a.ListLegalMoves(false);
-  CHECK_FALSE(std::find(moves.begin(), moves.end(), "O-O") != moves.end());
+  CHECK_FALSE(std::find(moves.begin(), moves.end(), "e1g1") != moves.end());
 
   // White Short Castle impossible 3 (queen attacks by black)
   a.Setup("rnbqkbnr/pppppqpp/8/8/8/8/PPPPP1PP/RNBQK11R w KQkq - 0 1");
   moves = a.ListLegalMoves(false);
-  CHECK_FALSE(std::find(moves.begin(), moves.end(), "O-O") != moves.end());
+  CHECK_FALSE(std::find(moves.begin(), moves.end(), "e1g1") != moves.end());
 
   // White Long Castle possible
   a.Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R3KNBR w KQkq - 0 1");
   moves = a.ListLegalMoves(false);
   REQUIRE(moves.size() == 23);
-  CHECK(find(moves.begin(), moves.end(), "O-O-O") != moves.end());
+  CHECK(find(moves.begin(), moves.end(), "e1c1") != moves.end());
 
   // White Long Castle impossible
   a.Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/R3KBNR w Kkq - 0 1");
   moves = a.ListLegalMoves(false);
-  CHECK_FALSE(std::find(moves.begin(), moves.end(), "O-O-O") != moves.end());
+  CHECK_FALSE(std::find(moves.begin(), moves.end(), "e1c1") != moves.end());
 
   // White Long Castle impossible 2
   a.Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RN2KBNR w KQkq - 0 1");
   moves = a.ListLegalMoves(false);
-  CHECK_FALSE(std::find(moves.begin(), moves.end(), "O-O-O") != moves.end());
+  CHECK_FALSE(std::find(moves.begin(), moves.end(), "e1c1") != moves.end());
 
   // White Long Castle impossible 3 (rook attacks by black)
   a.Setup("rnbqkbnr/pprppppp/8/8/8/8/PP1PPPPP/R3KBNR w KQkq - 0 1");
   moves = a.ListLegalMoves(false);
-  CHECK_FALSE(std::find(moves.begin(), moves.end(), "O-O-O") != moves.end());
+  CHECK_FALSE(std::find(moves.begin(), moves.end(), "e1c1") != moves.end());
 }
 
 TEST_CASE("IsPlayable", "[chessarbiter/IsPlayable]") {
@@ -367,5 +367,33 @@ TEST_CASE("SimpleCapture", "[SimplePieceCapture]") {
   a.Play("e4d5");
   CHECK(a.GetFEN() ==
         "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2");
-  CHECK(a.GetCapture()=='p');
+  CHECK(a.GetCapture() == 'p');
+}
+
+TEST_CASE("SimpleCastle", "[SimpleCastle]") {
+  ChessArbiter a;
+  a.Setup("rnbqkbnr/ppp1p1pp/8/3p1p2/4P3/3B1N2/PPPP1PPP/RNBQK2R w KQkq - 0 2");
+
+  // White
+  CHECK(a.Play("e1g1"));
+  CHECK(a.GetFEN() ==
+        "rnbqkbnr/ppp1p1pp/8/3p1p2/4P3/3B1N2/PPPP1PPP/RNBQ1RK1 b kq - 1 2");
+
+  a.Setup("rnbqkbnr/ppp1p1pp/8/3p1p2/4P3/1BNB1N2/PPPPQPPP/R3K2R w KQkq - 0 2");
+  CHECK(a.Play("e1c1"));
+  CHECK(a.GetFEN() ==
+        "rnbqkbnr/ppp1p1pp/8/3p1p2/4P3/1BNB1N2/PPPPQPPP/2KR3R b kq - 1 2");
+
+  // Black
+  a.Setup(
+      "r3k2r/pppnp1pp/1bq1bn2/3p1p2/4P3/1BNB1N2/PPPPQPPP/R3K2R b KQkq - 0 2");
+  CHECK(a.Play("e8g8"));
+  CHECK(a.GetFEN() ==
+        "r4rk1/pppnp1pp/1bq1bn2/3p1p2/4P3/1BNB1N2/PPPPQPPP/R3K2R w KQ - 1 3");
+
+  a.Setup(
+      "r3k2r/pppnp1pp/1bq1bn2/3p1p2/4P3/1BNB1N2/PPPPQPPP/R3K2R b KQkq - 0 2");
+  CHECK(a.Play("e8c8"));
+  CHECK(a.GetFEN() ==
+        "2kr3r/pppnp1pp/1bq1bn2/3p1p2/4P3/1BNB1N2/PPPPQPPP/R3K2R w KQ - 1 3");
 }

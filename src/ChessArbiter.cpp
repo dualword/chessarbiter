@@ -3,7 +3,7 @@
 namespace chessarbiter {
 ChessArbiter::ChessArbiter()
     : wPawn(1), wRook(5), wKnight(3), wBishop(3), wQueen(9), wKing(0), SAN(""),
-      capture(' '){}
+      capture(' ') {}
 
 void ChessArbiter::Setup(std::string fen) {
   positions.clear();
@@ -47,28 +47,32 @@ bool ChessArbiter::Play(std::string move) {
     FEN newFen = fen;
     INIT_BACKUP();
     SAN = "";
-    capture=' ';
+    capture = ' ';
 
     if (IsCapture) {
       capture = board.GetPieceAt(dst).piece;
     }
 
     // Perform the move
-    if (move == "O-O" || move == "O-O-O") {
-      if (fen.player && move == "O-O") {
+    if ((moved.piece == 'k' || moved.piece == 'K') && move == "e8g8" ||
+        move == "e8c8" || move == "e1g1" || move == "e1c1") {
+      if (move == "e8g8") {
         board.Move("e8g8");
-        board.Move("h8e8");
-      } else if (fen.player && move == "O-O") {
+        board.Move("h8f8");
+        SAN = "O-O";
+      } else if (move == "e8c8") {
         board.Move("e8c8");
         board.Move("a8d8");
-      } else if (!fen.player && move == "O-O") {
+        SAN = "O-O-O";
+      } else if (move == "e1g1") {
         board.Move("e1g1");
-        board.Move("h1e1");
+        board.Move("h1f1");
+        SAN = "O-O";
       } else {
         board.Move("e1c1");
         board.Move("a1d1");
+        SAN = "O-O-O";
       }
-      SAN = move;
     } else {
       // Update SAN move
       if (moved.piece == 'p' || moved.piece == 'P') {
@@ -312,10 +316,21 @@ std::vector<std::string> ChessArbiter::ListLegalMoves(bool isBlack) {
   }
 
   // Casling
-  if (IsCastlePossible(isBlack, false))
-    moves.push_back("O-O");
-  if (IsCastlePossible(isBlack, true))
-    moves.push_back("O-O-O");
+  if (isBlack) {
+    if (IsCastlePossible(isBlack, false)) {
+      moves.push_back("e8g8");
+    }
+    if (IsCastlePossible(isBlack, true)) {
+      moves.push_back("e8c8");
+    }
+  } else {
+    if (IsCastlePossible(isBlack, false)) {
+      moves.push_back("e1g1");
+    }
+    if (IsCastlePossible(isBlack, true)) {
+      moves.push_back("e1c1");
+    }
+  }
 
   return (moves);
 }
