@@ -65,5 +65,6 @@ public:
   bool IsDrawByNoMoves();
   bool IsDrawByRepetitions();
   bool IsDraw();
+  std::string ParseSAN(std::string SANMove);
 };
 } // namespace chessarbiter

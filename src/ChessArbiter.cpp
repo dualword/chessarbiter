@@ -400,4 +400,113 @@ bool ChessArbiter::IsCheckMate() {
 
 std::string ChessArbiter::GetSAN() { return (SAN); }
 char ChessArbiter::GetCapture() { return (capture); }
+
+std::string ChessArbiter::ParseSAN(std::string SANMove) {
+  std::string src, dst;
+  char piece = ' ';
+  char hint = ' ';
+  bool isHintRank = false;
+
+  // First castling
+  if (SANMove[0] == 'O' || SANMove[0] == '0') {
+    char c3 = (SANMove.size() >= 3) ? SANMove[3] : '?';
+    // Long castle
+    if (c3 == '-') {
+      if (fen.player && IsCastlePossible(fen.player, true)) {
+        return ("e8c8");
+      } else if (IsCastlePossible(fen.player, true)) {
+        return ("e1c1");
+      }
+    } else {
+      if (fen.player && IsCastlePossible(fen.player, false)) {
+        return ("e8g8");
+      } else if (IsCastlePossible(fen.player, false)) {
+        return ("e1g1");
+      }
+    }
+  }
+
+  // First deduce dst square in the move
+  if (SANMove.size() > 0) {
+    // Pawn moves
+    if (std::islower(SANMove[0])) {
+      if (fen.player) {
+        piece = 'p';
+      } else {
+        piece = 'P';
+      }
+      // Not a capture
+      if (SANMove[1] != 'x') {
+        dst = SANMove.substr(0, 2);
+      } else {
+        dst = SANMove.substr(2, 2);
+      }
+    } else {
+      piece = SANMove[0];
+      char c1 = (SANMove.size() >= 2) ? SANMove[1] : '?';
+      char c2 = (SANMove.size() >= 3) ? SANMove[2] : '?';
+      char c3 = (SANMove.size() >= 4) ? SANMove[3] : '?';
+      if (c1 == 'x') {
+        dst = SANMove.substr(2, 2);
+      } else if (c2 == 'x') {
+        hint = c1;
+        dst = SANMove.substr(3, 2);
+      } else if (IS_DIGIT(c2)) {
+        dst = SANMove.substr(1, 2);
+      } else {
+        hint = c1;
+        dst = SANMove.substr(2, 2);
+      }
+    }
+  }
+  isHintRank = IS_DIGIT(hint);
+
+  // Now find src thanks to legal moves
+  std::vector<std::string> src_candidates;
+  for (std::string &move : ListLegalMoves(fen.player)) {
+    std::string current_src = move.substr(0, 2);
+    std::string current_dst = move.substr(2, 2);
+    if (current_dst == dst) {
+      src_candidates.push_back(current_src);
+    }
+  }
+
+  // Now filter the legals move
+  if (src_candidates.size() > 0) {
+    if (src_candidates.size() > 1) {
+      std::vector<std::string> src_candidates_filtered;
+      // Filter according to pieces:
+      for (std::string &cand : src_candidates) {
+        Piece p = board.GetPieceAt(cand); // This call never fails
+        if (std::toupper(p.piece) == piece) {
+          src_candidates_filtered.push_back(cand);
+        }
+      }
+      src_candidates = src_candidates_filtered;
+      src_candidates_filtered.clear();
+      // Last Filtering
+      if (src_candidates.size() > 1) {
+        for (std::string &cand : src_candidates) {
+          char cand_hint = cand[0];
+          if (isHintRank) {
+            cand_hint = cand[1];
+          }
+          if (hint == cand_hint) {
+            src_candidates_filtered.push_back(cand);
+          }
+        }
+      }
+      src_candidates = src_candidates_filtered;
+    }
+    src = src_candidates[0];
+  }
+
+  // Ensure that we return empty string if no matches
+  if(src.size()<=0){
+    return("");
+  }
+  // Else return "srcdst" string
+  return (src + dst);
+}
+
 } // namespace chessarbiter

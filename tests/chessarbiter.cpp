@@ -413,3 +413,36 @@ TEST_CASE("SimpleEnPassant", "[SimpleEnPassant]") {
   CHECK(a.GetFEN() ==
         "rnbqkbnr/ppppp1pp/8/8/8/4p3/PPPP1PPP/RNBQKBNR w KQkq - 0 2");
 }
+
+TEST_CASE("ParseSAN", "[ParseSAN]") {
+  ChessArbiter a;
+
+  // Initial position test
+  a.Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+  CHECK(a.ParseSAN("d4") == "d2d4");
+  CHECK(a.ParseSAN("e3") == "e2e3");
+  CHECK(a.ParseSAN("e4") == "e2e4");
+  CHECK(a.ParseSAN("Nc3") == "b1c3");
+  CHECK(a.ParseSAN("Nf3") == "g1f3");
+
+  // Check when two similar piece can go to the same square
+  a.Setup("rnbqkbnr/pppppppp/8/8/P6P/7R/1PPPPPP1/RNBQKBN1 w Qkq - 0 1");
+  CHECK(a.ParseSAN("Raa3") == "a1a3");
+  CHECK(a.ParseSAN("Rha3") == "h3a3");
+  a.Setup("rnbqkbnr/pppppppp/8/8/P6P/R7/1PPPPPP1/RNBQKBN1 w Qkq - 0 1");
+  CHECK(a.ParseSAN("R1a2") == "a1a2");
+  CHECK(a.ParseSAN("R3a2") == "a3a2");
+  a.Setup("r1bqkb1r/pppppppp/5n2/8/P6P/R1N5/1PPPPnP1/R1BQKBN1 b Qkq - 0 1");
+  CHECK(a.ParseSAN("N6e4") == "f6e4");
+  CHECK(a.ParseSAN("N2e4") == "f2e4");
+
+  // Castling
+  a.Setup("rnbqkbnr/pppppppp/8/8/8/4NB2/PPPPPPPP/RNBQK2R w KQkq - 0 1");
+  CHECK(a.ParseSAN("O-O") == "e1g1");
+  a.Setup("rnbqkbnr/pppppppp/8/8/8/2NBQ3/PPPPPPPP/R3KBNR w KQkq - 0 1");
+  CHECK(a.ParseSAN("O-O-O") == "e1c1");
+  a.Setup("rnbqk2r/pppppppp/4bn2/8/8/2NBQ3/PPPPPPPP/R3KBNR b KQkq - 0 1");
+  CHECK(a.ParseSAN("O-O") == "e8g8");
+  a.Setup("r3kb1r/pppppppp/2qnbn2/8/8/2NBQ3/PPPPPPPP/R3KBNR b KQkq - 0 1");
+  CHECK(a.ParseSAN("O-O-O") == "e8c8");
+}
