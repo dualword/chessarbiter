@@ -110,6 +110,13 @@ bool ChessArbiter::Play(std::string move) {
       } else if (!fen.player && (dst[1] - src[1] == 2)) {
         newFen.en_passant = src[0] + std::string() + (char)(src[1] + 1);
       }
+      if (dst == fen.en_passant) {
+        if (fen.player) {
+          board.RemovePiece(dst[0] + std::string() + (char)(dst[1] + 1));
+        } else {
+          board.RemovePiece(dst[0] + std::string() + (char)(dst[1] - 1));
+        }
+      }
       newFen.halfmove = 0; // Pawn moves reset half moves
     }
     // Captures reset half moves

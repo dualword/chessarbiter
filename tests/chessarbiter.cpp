@@ -397,3 +397,19 @@ TEST_CASE("SimpleCastle", "[SimpleCastle]") {
   CHECK(a.GetFEN() ==
         "2kr3r/pppnp1pp/1bq1bn2/3p1p2/4P3/1BNB1N2/PPPPQPPP/R3K2R w KQ - 1 3");
 }
+
+TEST_CASE("SimpleEnPassant", "[SimpleEnPassant]") {
+  ChessArbiter a;
+
+  // White capture
+  a.Setup("rnbqkbnr/ppppp1pp/8/4Pp2/8/8/PPPP1PPP/RNBQKBNR w KQkq f6 0 2");
+  CHECK(a.Play("e5f6"));
+  CHECK(a.GetFEN() ==
+        "rnbqkbnr/ppppp1pp/5P2/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2");
+
+  // Black capture
+  a.Setup("rnbqkbnr/ppppp1pp/8/8/4Pp2/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1");
+  CHECK(a.Play("f4e3"));
+  CHECK(a.GetFEN() ==
+        "rnbqkbnr/ppppp1pp/8/8/8/4p3/PPPP1PPP/RNBQKBNR w KQkq - 0 2");
+}
