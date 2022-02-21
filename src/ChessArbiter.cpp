@@ -370,8 +370,8 @@ bool ChessArbiter::IsDrawByNoMoves() {
 }
 
 bool ChessArbiter::IsDrawByRepetitions() {
-  for (auto const &[key, val] : positions) {
-    if (val >= 3) {
+  for (auto const &pos : positions) {
+    if (pos.second >= 3) {
       return (true);
     }
   }
@@ -502,8 +502,8 @@ std::string ChessArbiter::ParseSAN(std::string SANMove) {
   }
 
   // Ensure that we return empty string if no matches
-  if(src.size()<=0){
-    return("");
+  if (src.size() <= 0) {
+    return ("");
   }
   // Else return "srcdst" string
   return (src + dst);
