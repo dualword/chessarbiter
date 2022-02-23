@@ -445,4 +445,9 @@ TEST_CASE("ParseSAN", "[ParseSAN]") {
   CHECK(a.ParseSAN("O-O") == "e8g8");
   a.Setup("r3kb1r/pppppppp/2qnbn2/8/8/2NBQ3/PPPPPPPP/R3KBNR b KQkq - 0 1");
   CHECK(a.ParseSAN("O-O-O") == "e8c8");
+
+  // Random tests
+  a.Setup(
+      "r1bq1rk1/p4ppp/2p2n2/1pbPp3/3n4/P1NB3P/1PPP1PPN/R1BQ1RK1 b - - 0 10");
+  CHECK(a.ParseSAN("exd5") == "c6d5");
 }
