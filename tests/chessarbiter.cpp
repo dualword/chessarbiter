@@ -255,10 +255,10 @@ TEST_CASE("Play Basic", "[chessarbiter/Play]") {
   // Black turn
   CHECK(a.Play("e7e5"));
   CHECK(a.GetFEN() ==
-        "rnbqkbnr/pppp1ppp/8/4p3/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2");
+        "rnbqkbnr/pppp1ppp/8/4p3/8/4P3/PPPP1PPP/RNBQKBNR w KQkq e6 0 2");
   CHECK_FALSE(a.Play("d7d6")); // White turn
   CHECK(a.GetFEN() ==
-        "rnbqkbnr/pppp1ppp/8/4p3/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2");
+        "rnbqkbnr/pppp1ppp/8/4p3/8/4P3/PPPP1PPP/RNBQKBNR w KQkq e6 0 2");
 
   // White turn
   CHECK(a.Play("b1c3"));
@@ -412,6 +412,13 @@ TEST_CASE("SimpleEnPassant", "[SimpleEnPassant]") {
   CHECK(a.Play("f4e3"));
   CHECK(a.GetFEN() ==
         "rnbqkbnr/ppppp1pp/8/8/8/4p3/PPPP1PPP/RNBQKBNR w KQkq - 0 2");
+
+  // Check en_passant is set
+  a.Setup(
+      "r3k2r/1pqbbp1p/1nn1p1p1/p2pP3/3P1PP1/PP1B4/1B1NN2P/R2Q1RK1 b kq - 2 14");
+  CHECK(a.Play("f7f5"));
+  CHECK(a.GetFEN() == "r3k2r/1pqbb2p/1nn1p1p1/p2pPp2/3P1PP1/PP1B4/1B1NN2P/"
+                      "R2Q1RK1 w kq f6 0 15");
 }
 
 TEST_CASE("ParseSAN", "[ParseSAN]") {

@@ -105,7 +105,7 @@ bool ChessArbiter::Play(std::string move) {
     // Check enpassant
     newFen.en_passant = "-";
     if (moved.piece == 'p' || moved.piece == 'P') {
-      if (fen.player && (dst[1] - src[1] == 2)) {
+      if (fen.player && (src[1] - dst[1] == 2)) {
         newFen.en_passant = src[0] + std::string() + (char)(src[1] - 1);
       } else if (!fen.player && (dst[1] - src[1] == 2)) {
         newFen.en_passant = src[0] + std::string() + (char)(src[1] + 1);
