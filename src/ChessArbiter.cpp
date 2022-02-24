@@ -435,6 +435,7 @@ std::string ChessArbiter::ParseSAN(std::string SANMove) {
     // Pawn moves
     if (std::islower(SANMove[0])) {
       piece = 'P';
+      hint=SANMove[0];
       // Not a capture
       if (SANMove[1] != 'x') {
         dst = SANMove.substr(0, 2);

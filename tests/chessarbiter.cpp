@@ -453,4 +453,7 @@ TEST_CASE("ParseSAN", "[ParseSAN]") {
 
   a.Setup("rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4");
   CHECK(a.ParseSAN("exd5") == "e4d5");
+
+  a.Setup("1r4k1/4pp1p/6pb/1p3b2/P1P5/5P2/2P3PP/1K1R3R w - - 0 23");
+  CHECK(a.ParseSAN("cxb5") == "c4b5");
 }
