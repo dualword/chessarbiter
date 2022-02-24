@@ -309,12 +309,16 @@ std::vector<std::string> ChessArbiter::ListLegalMoves(bool isBlack) {
     bool IsDstEmpty = board.IsEmpty(dst);
 
     // Pawns side  moves
-    if ((srcp.piece == 'p' || srcp.piece == 'P') && (src[0] != dst[0])) {
-      if (!IsDstEmpty) {
-        Piece attacked = board.GetPieceAt(dst);
-        if (srcp.isBlack != attacked.isBlack)
+    if (srcp.piece == 'p' || srcp.piece == 'P') {
+      if ((src[0] != dst[0])) {
+        if (!IsDstEmpty) {
+          Piece attacked = board.GetPieceAt(dst);
+          if (srcp.isBlack != attacked.isBlack)
+            moves.push_back(move);
+        } else if (dst == fen.en_passant) {
           moves.push_back(move);
-      } else if (dst == fen.en_passant) {
+        }
+      } else if (IsDstEmpty) {
         moves.push_back(move);
       }
     } else {
