@@ -30,7 +30,7 @@ std::string ChessArbiter::GetFEN() { return (FENParser::Serialize(fen)); }
 
 std::string ChessArbiter::GetBoard() { return (fen.board); }
 
-bool ChessArbiter::IsBlackTurn() { return (fen.player == 'b'); }
+bool ChessArbiter::IsBlackTurn() { return (fen.player); }
 
 bool ChessArbiter::IsCheck(bool isBlack) {
   std::string kingloc = board.GetKingLocation(isBlack);
