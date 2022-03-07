@@ -10,14 +10,16 @@
   if (positions.find(fen.board) != positions.end())                            \
     positions_backup = positions[fen.board];                                   \
   std::string SAN_backup = SAN;                                                \
-  char capture_backup = capture;
+  char capture_backup = capture;                                               \
+  bool was_enpassant_backup = was_enpassant;
 
 #define RESTORE_BACKUP()                                                       \
   SetFEN(fen_backup);                                                          \
   if (positions_backup != 0)                                                   \
     positions[fen.board] = positions_backup;                                   \
   SAN = SAN_backup;                                                            \
-  capture = capture_backup;
+  capture = capture_backup;                                                    \
+  was_enpassant = was_enpassant_backup;
 
 namespace chessarbiter {
 class ChessArbiter {
@@ -31,6 +33,7 @@ class ChessArbiter {
   void SetFEN(FEN);
   std::string SAN, SAN_last;
   char capture;
+  bool was_enpassant;
 
 public:
   ChessArbiter();
@@ -65,6 +68,7 @@ public:
   bool IsDrawByNoMoves();
   bool IsDrawByRepetitions();
   bool IsDraw();
+  bool WasEnPassant();
   std::string ParseSAN(std::string SANMove);
 };
 } // namespace chessarbiter

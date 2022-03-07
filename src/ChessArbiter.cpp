@@ -3,7 +3,7 @@
 namespace chessarbiter {
 ChessArbiter::ChessArbiter()
     : wPawn(1), wRook(5), wKnight(3), wBishop(3), wQueen(9), wKing(0), SAN(""),
-      capture(' ') {
+      capture(' '), was_enpassant(false) {
   Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 }
 
@@ -50,6 +50,7 @@ bool ChessArbiter::Play(std::string move) {
     INIT_BACKUP();
     SAN = "";
     capture = ' ';
+    was_enpassant=false;
 
     if (IsCapture) {
       capture = board.GetPieceAt(dst).piece;
@@ -120,6 +121,7 @@ bool ChessArbiter::Play(std::string move) {
           board.RemovePiece(dst[0] + std::string() + (char)(dst[1] - 1));
           capture = 'p';
         }
+        was_enpassant=true;
       }
       newFen.halfmove = 0; // Pawn moves reset half moves
     }
@@ -172,6 +174,8 @@ bool ChessArbiter::Play(std::string move) {
   }
   return (false);
 }
+
+bool ChessArbiter::WasEnPassant() { return (was_enpassant); }
 
 bool ChessArbiter::IsAttacked(std::string square, bool by) {
   std::vector<std::string> moves = board.ListPossibleMoves(by);

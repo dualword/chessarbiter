@@ -368,6 +368,7 @@ TEST_CASE("SimpleCapture", "[SimplePieceCapture]") {
   CHECK(a.GetFEN() ==
         "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2");
   CHECK(a.GetCapture() == 'p');
+  CHECK_FALSE(a.WasEnPassant());
 }
 
 TEST_CASE("SimpleCastle", "[SimpleCastle]") {
@@ -407,6 +408,7 @@ TEST_CASE("SimpleEnPassant", "[SimpleEnPassant]") {
   CHECK(a.GetFEN() ==
         "rnbqkbnr/ppppp1pp/5P2/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2");
   CHECK(a.GetCapture() == 'p');
+  CHECK(a.WasEnPassant());
 
   // Black capture
   a.Setup("rnbqkbnr/ppppp1pp/8/8/4Pp2/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1");
@@ -414,6 +416,7 @@ TEST_CASE("SimpleEnPassant", "[SimpleEnPassant]") {
   CHECK(a.GetFEN() ==
         "rnbqkbnr/ppppp1pp/8/8/8/4p3/PPPP1PPP/RNBQKBNR w KQkq - 0 2");
   CHECK(a.GetCapture() == 'P');
+  CHECK(a.WasEnPassant());
 
   // Check en_passant is set
   a.Setup(
@@ -421,6 +424,7 @@ TEST_CASE("SimpleEnPassant", "[SimpleEnPassant]") {
   CHECK(a.Play("f7f5"));
   CHECK(a.GetFEN() == "r3k2r/1pqbb2p/1nn1p1p1/p2pPp2/3P1PP1/PP1B4/1B1NN2P/"
                       "R2Q1RK1 w kq f6 0 15");
+  CHECK_FALSE(a.WasEnPassant());
 }
 
 TEST_CASE("ParseSAN", "[ParseSAN]") {
