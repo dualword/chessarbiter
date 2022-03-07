@@ -3,7 +3,9 @@
 namespace chessarbiter {
 ChessArbiter::ChessArbiter()
     : wPawn(1), wRook(5), wKnight(3), wBishop(3), wQueen(9), wKing(0), SAN(""),
-      capture(' ') {}
+      capture(' ') {
+  Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+}
 
 void ChessArbiter::Setup(std::string fen) {
   positions.clear();
