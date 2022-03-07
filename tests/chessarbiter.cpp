@@ -406,12 +406,14 @@ TEST_CASE("SimpleEnPassant", "[SimpleEnPassant]") {
   CHECK(a.Play("e5f6"));
   CHECK(a.GetFEN() ==
         "rnbqkbnr/ppppp1pp/5P2/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2");
+  CHECK(a.GetCapture() == 'p');
 
   // Black capture
   a.Setup("rnbqkbnr/ppppp1pp/8/8/4Pp2/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1");
   CHECK(a.Play("f4e3"));
   CHECK(a.GetFEN() ==
         "rnbqkbnr/ppppp1pp/8/8/8/4p3/PPPP1PPP/RNBQKBNR w KQkq - 0 2");
+  CHECK(a.GetCapture() == 'P');
 
   // Check en_passant is set
   a.Setup(

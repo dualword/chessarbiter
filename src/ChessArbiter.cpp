@@ -113,8 +113,10 @@ bool ChessArbiter::Play(std::string move) {
       if (dst == fen.en_passant) {
         if (fen.player) {
           board.RemovePiece(dst[0] + std::string() + (char)(dst[1] + 1));
+          capture = 'P';
         } else {
           board.RemovePiece(dst[0] + std::string() + (char)(dst[1] - 1));
+          capture = 'p';
         }
       }
       newFen.halfmove = 0; // Pawn moves reset half moves
@@ -435,7 +437,7 @@ std::string ChessArbiter::ParseSAN(std::string SANMove) {
     // Pawn moves
     if (std::islower(SANMove[0])) {
       piece = 'P';
-      hint=SANMove[0];
+      hint = SANMove[0];
       // Not a capture
       if (SANMove[1] != 'x') {
         dst = SANMove.substr(0, 2);
