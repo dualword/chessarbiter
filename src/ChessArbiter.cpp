@@ -39,7 +39,7 @@ bool ChessArbiter::IsCheck(bool isBlack) {
   return (IsAttacked(kingloc, !isBlack));
 }
 
-bool ChessArbiter::Play(std::string move) {
+bool ChessArbiter::Play(std::string move, char promote) {
   std::vector<std::string> moves = ListLegalMoves(fen.player);
   if (find(moves.begin(), moves.end(), move) != moves.end()) {
     Piece moved = board.GetPieceAt(move.substr(0, 2)); // This call never fail
@@ -124,6 +124,18 @@ bool ChessArbiter::Play(std::string move) {
         was_enpassant=true;
       }
       newFen.halfmove = 0; // Pawn moves reset half moves
+    }
+    // Check pawn promotion
+    if(moved.piece == 'p' || moved.piece == 'P'){
+      if(moved.piece == 'p' && dst[1]=='1'){
+        board.RemovePiece(dst);
+        board.AddPiece(tolower(promote),dst);
+        SAN+="="+promote;
+      } else if(dst[1]=='8'){
+        board.RemovePiece(dst);
+        board.AddPiece(toupper(promote),dst);
+        SAN+="="+toupper(promote);
+      }
     }
     // Captures reset half moves
     if (IsCapture) {
@@ -516,6 +528,20 @@ std::string ChessArbiter::ParseSAN(std::string SANMove) {
   }
   // Else return "srcdst" string
   return (src + dst);
+}
+
+char ChessArbiter::ParseSANPromotion(std::string SANMove){
+  for(short i=0;i<SANMove.length();i++){
+    if(SANMove[i]=='='){
+      if((i+1)<SANMove.length()){
+        char p=SANMove[i+1]; // Must be upper
+        if(p=='Q' || p=='R' || p=='B' || p=='N'){
+          return SANMove[i+1];
+        }
+      }
+    }
+  }
+  return 'Q';
 }
 
 } // namespace chessarbiter

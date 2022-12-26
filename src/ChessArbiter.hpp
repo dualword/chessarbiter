@@ -44,7 +44,7 @@ public:
   /// @brief Check if a side is in check
   bool IsCheck(bool);
   /// @brief Play a move (return false if it's illegal)
-  bool Play(std::string);
+  bool Play(std::string, char promote='Q');
   /// @brief Check if a square is attacked by a particular player
   bool IsAttacked(std::string, bool);
   /// @brief Get the serialized board
@@ -70,5 +70,6 @@ public:
   bool IsDraw();
   bool WasEnPassant();
   std::string ParseSAN(std::string SANMove);
+  char ParseSANPromotion(std::string SANMove);
 };
 } // namespace chessarbiter
