@@ -57,8 +57,8 @@ bool ChessArbiter::Play(std::string move) {
     }
 
     // Perform the move
-    if ((moved.piece == 'k' || moved.piece == 'K') && move == "e8g8" ||
-        move == "e8c8" || move == "e1g1" || move == "e1c1") {
+    if ((moved.piece == 'k' || moved.piece == 'K') && (move == "e8g8" ||
+        move == "e8c8" || move == "e1g1" || move == "e1c1")) {
       if (move == "e8g8") {
         board.Move("e8g8");
         board.Move("h8f8");

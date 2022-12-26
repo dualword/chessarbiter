@@ -470,3 +470,12 @@ TEST_CASE("ParseSAN", "[ParseSAN]") {
   a.Setup("1r4k1/4pp1p/6pb/1p3b2/P1P5/5P2/2P3PP/1K1R3R w - - 0 23");
   CHECK(a.ParseSAN("cxb5") == "c4b5");
 }
+
+TEST_CASE("Specific bugs found on a game", "[BugFixes]") {
+  ChessArbiter a;
+
+  // BUG 1
+  a.Setup("1k3r1r/npqbbp2/4p1p1/p2pPnNp/1P3B1P/P1PB4/5PPQ/RN2R1K1 w - - 1 19");
+  a.Play("e1c1");
+  CHECK(a.GetFEN() == "1k3r1r/npqbbp2/4p1p1/p2pPnNp/1P3B1P/P1PB4/5PPQ/RNR3K1 b - - 2 19");
+}
