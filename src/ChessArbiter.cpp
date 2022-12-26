@@ -130,7 +130,7 @@ bool ChessArbiter::Play(std::string move, char promote) {
       if(moved.piece == 'p' && dst[1]=='1'){
         board.RemovePiece(dst);
         board.AddPiece(tolower(promote),dst);
-        SAN+="="+promote;
+        SAN+="="+toupper(promote);
       } else if(dst[1]=='8'){
         board.RemovePiece(dst);
         board.AddPiece(toupper(promote),dst);
