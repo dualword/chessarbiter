@@ -7,7 +7,7 @@ ChessArbiter::ChessArbiter()
   Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 }
 
-void ChessArbiter::Setup(const std::string fen) {
+void ChessArbiter::Setup(const std::string &fen) {
   positions.clear();
   SetFEN(fen);
   positions[this->fen.board] = 1;
@@ -39,7 +39,7 @@ bool ChessArbiter::IsCheck(bool isBlack) {
   return (IsAttacked(kingloc, !isBlack));
 }
 
-bool ChessArbiter::Play(const std::string move, const char promote) {
+bool ChessArbiter::Play(const std::string &move, char promote) {
   std::vector<std::string> moves = ListLegalMoves(fen.player);
   if (find(moves.begin(), moves.end(), move) != moves.end()) {
     Piece moved = board.GetPieceAt(move.substr(0, 2)); // This call never fail
@@ -189,7 +189,7 @@ bool ChessArbiter::Play(const std::string move, const char promote) {
 
 bool ChessArbiter::WasEnPassant() { return (was_enpassant); }
 
-bool ChessArbiter::IsAttacked(const std::string square, const bool by) {
+bool ChessArbiter::IsAttacked(const std::string &square, bool by) {
   std::vector<std::string> moves = board.ListPossibleMoves(by);
   for (std::string &m : moves) {
     std::string src = m.substr(0, 2);
@@ -209,7 +209,7 @@ bool ChessArbiter::IsAttacked(const std::string square, const bool by) {
   return (false);
 }
 
-bool ChessArbiter::IsCastlePossible(const bool isBlack, const bool isLong) {
+bool ChessArbiter::IsCastlePossible(bool isBlack, bool isLong) {
 
   if (isBlack && isLong && fen.black_castle_long) {
     if (board.IsEmpty("d8") && board.IsEmpty("c8") && board.IsEmpty("b8")) {
@@ -273,7 +273,7 @@ int ChessArbiter::GetMaterialScore() {
   return (whiteScore - blackScore);
 }
 
-std::string ChessArbiter::GetCaptures(const bool isBlack) {
+std::string ChessArbiter::GetCaptures(bool isBlack) {
   std::string captures;
   // Pawn
   char p = 'P';
@@ -320,7 +320,7 @@ std::string ChessArbiter::GetCaptures(const bool isBlack) {
   return (captures);
 }
 
-std::vector<std::string> ChessArbiter::ListLegalMoves(const bool isBlack) {
+std::vector<std::string> ChessArbiter::ListLegalMoves(bool isBlack) {
   std::vector<std::string> moves;
   for (std::string &move : board.ListPossibleMoves(isBlack)) {
     std::string src = move.substr(0, 2);
@@ -425,7 +425,7 @@ bool ChessArbiter::IsCheckMate() {
 std::string ChessArbiter::GetSAN() { return (SAN); }
 char ChessArbiter::GetCapture() { return (capture); }
 
-std::string ChessArbiter::ParseSAN(const std::string SANMove) {
+std::string ChessArbiter::ParseSAN(const std::string &SANMove) {
   std::string src, dst;
   char piece = ' ';
   char hint = ' ';
@@ -530,7 +530,7 @@ std::string ChessArbiter::ParseSAN(const std::string SANMove) {
   return (src + dst);
 }
 
-char ChessArbiter::ParseSANPromotion(const std::string SANMove){
+char ChessArbiter::ParseSANPromotion(const std::string &SANMove){
   if(SANMove.length()>=4 && SANMove[0] - 'a' < 8 && SANMove[2]=='='){
     char p=SANMove[3]; // Must be upper
     if(p=='Q' || p=='R' || p=='B' || p=='N'){
