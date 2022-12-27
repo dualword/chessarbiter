@@ -2,9 +2,9 @@
 
 namespace chessarbiter {
 
-std::string FENParser::normalize_rank(std::string fen_rank) {
+std::string FENParser::normalize_rank(const std::string &fen_rank) {
   std::string normalized;
-  for (char &c : fen_rank) {
+  for (const char &c : fen_rank) {
     if (IS_DIGIT(c)) {
       for (char i = 0; i < (c - '0'); i++) {
         normalized += ' ';
@@ -27,14 +27,14 @@ std::string FENParser::normalize_rank(std::string fen_rank) {
   return (normalized);
 }
 
-char FENParser::NextToken(std::string fen, char loc) {
+char FENParser::NextToken(const std::string &fen, char loc) {
   while (loc < fen.size() && IS_BLANK(fen[loc])) {
     loc++;
   }
   return (loc);
 }
 
-char FENParser::NextRank(std::string fen, char loc) {
+char FENParser::NextRank(const std::string &fen, char loc) {
   loc++;
   while (loc < fen.size() && fen[loc] != '/' && fen[loc] != ' ') {
     loc++;
@@ -42,11 +42,11 @@ char FENParser::NextRank(std::string fen, char loc) {
   return (loc);
 }
 
-std::string FENParser::Serialize(FEN fen) {
+std::string FENParser::Serialize(const FEN &fen) {
   std::string s;
   char skip = 0;
   char rank = 0;
-  for (char &c : fen.board) {
+  for (const char &c : fen.board) {
     rank++;
     if (c == ' ') {
       skip++;
@@ -104,7 +104,7 @@ std::string FENParser::Serialize(FEN fen) {
   return (s);
 }
 
-FEN FENParser::Parse(std::string fen) {
+FEN FENParser::Parse(const std::string &fen) {
   FEN parsed;
 
   // Parse board

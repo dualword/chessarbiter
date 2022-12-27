@@ -1,7 +1,7 @@
 #include "Piece.hpp"
 
 namespace chessarbiter {
-Piece::Piece(char c, std::string coord)
+Piece::Piece(char c, const std::string &coord)
     : piece(c), isBlack(!isupper(c)), coord(coord) {}
 
 std::vector<std::string> Piece::GetMoves() {

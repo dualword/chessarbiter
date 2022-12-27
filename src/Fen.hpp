@@ -29,15 +29,15 @@ public:
 
 class FENParser {
 private:
-  static std::string normalize_rank(std::string fen_rank);
-  static char NextToken(std::string fen, char loc);
-  static char NextRank(std::string fen, char loc);
+  static std::string normalize_rank(const std::string &fen_rank);
+  static char NextToken(const std::string &fen, char loc);
+  static char NextRank(const std::string &fen, char loc);
 
 public:
   /// @brief Parse a FEN from a string (can throw InvalidFEN)
-  static FEN Parse(std::string);
+  static FEN Parse(const std::string &fen);
   /// @brief Generate a fen string from the FEN object
-  static std::string Serialize(FEN fen);
+  static std::string Serialize(const FEN &fen);
 };
 
 struct InvalidFEN : public std::exception {

@@ -13,9 +13,9 @@ void ChessArbiter::Setup(const std::string &fen) {
   positions[this->fen.board] = 1;
 }
 
-void ChessArbiter::SetFEN(FEN fen) { SetFEN(FENParser::Serialize(fen)); }
+void ChessArbiter::SetFEN(const FEN &fen) { SetFEN(FENParser::Serialize(fen)); }
 
-void ChessArbiter::SetFEN(std::string newfen) {
+void ChessArbiter::SetFEN(const std::string &newfen) {
   fen = FENParser::Parse(newfen);
 
   board.Clear();

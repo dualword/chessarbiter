@@ -29,8 +29,8 @@ class ChessArbiter {
   /// @brief Use to compute occurences of positions
   std::unordered_map<std::string, char> positions;
   /// @brief FEN methods used internally
-  void SetFEN(std::string);
-  void SetFEN(FEN);
+  void SetFEN(const std::string &newfen);
+  void SetFEN(const FEN &fen);
   std::string SAN, SAN_last;
   char capture;
   bool was_enpassant;

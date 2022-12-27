@@ -19,7 +19,7 @@ public:
   bool isBlack;
   std::string coord;
   char piece;
-  Piece(char c, std::string coord);
+  Piece(char c, const std::string &coord);
   /// @brief Get all possible moves according to the type of piece and its position
   std::vector<std::string> GetMoves();
 };
