@@ -37,16 +37,16 @@ class ChessArbiter {
 
 public:
   ChessArbiter();
-  void Setup(std::string);
+  void Setup(const std::string);
   std::string GetFEN();
   /// @brief Check which player is going to play
   bool IsBlackTurn();
   /// @brief Check if a side is in check
   bool IsCheck(bool);
   /// @brief Play a move (return false if it's illegal)
-  bool Play(std::string, char promote='Q');
+  bool Play(const std::string, const char promote='Q');
   /// @brief Check if a square is attacked by a particular player
-  bool IsAttacked(std::string, bool);
+  bool IsAttacked(const std::string, const bool);
   /// @brief Get the serialized board
   std::string GetBoard();
   /// @brief Get current position evaluation according to player's material
@@ -54,14 +54,14 @@ public:
   /// @brief Check if position is legal to be played
   bool IsPlayable();
   /// @brief Get pieces captures by a player
-  std::string GetCaptures(bool);
+  std::string GetCaptures(const bool);
   char GetCapture();
   /// @brief Get the english SAN format of the last move
   std::string GetSAN();
   /// @brief List all the legal moves of a player
-  std::vector<std::string> ListLegalMoves(bool);
+  std::vector<std::string> ListLegalMoves(const bool);
   /// @brief Check if a specific castle is possible by a player
-  bool IsCastlePossible(bool, bool);
+  bool IsCastlePossible(const bool, const bool);
   bool IsCheckMate();
   /// @brief Draws check
   bool IsDrawByFiftyMoveRule();
@@ -69,7 +69,7 @@ public:
   bool IsDrawByRepetitions();
   bool IsDraw();
   bool WasEnPassant();
-  std::string ParseSAN(std::string SANMove);
-  char ParseSANPromotion(std::string SANMove);
+  std::string ParseSAN(const std::string SANMove);
+  char ParseSANPromotion(const std::string SANMove);
 };
 } // namespace chessarbiter
