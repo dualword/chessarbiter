@@ -17,7 +17,7 @@ ChessArbiter is a library that allow you to play chess games in C++. It ensures 
   - Attacked squares
   - Checkmate
   - ...
-- More features are coming soon!
+- Support SAN (Short Algebraic Notation) parsing
 
 # How to setup ChessArbiter
 ChessArbiter can be used as a shared library in your project.
@@ -28,12 +28,25 @@ Somewhere at the beginning of the file:
 
     #include "ChessArbiter.hpp"
 
-Start playing:
+Start playing with absolute moves:
 
     ChessArbiter arbiter;
     arbiter.Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     // Now start playing!
     if(!arbiter.Play("e2e4")){
+        // Handle illegal moves
+    }
+    if(arbiter.IsCheckmate()){
+        // Game ends
+    }
+
+Play with SAN moves:
+
+    ChessArbiter arbiter;
+    arbiter.Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    std::string move=arbiter.ParseSAN("e4");
+    // See ParseSANPromotion() to handle SAN moves with promotion
+    if(!arbiter.Play(move)){
         // Handle illegal moves
     }
     if(arbiter.IsCheckmate()){
