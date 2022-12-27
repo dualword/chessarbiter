@@ -502,4 +502,10 @@ TEST_CASE("Specific bugs found on a game", "[BugFixes]") {
   CHECK(p == 'R');
   p=a.ParseSANPromotion("c1=R");
   CHECK(p == 'R');
+
+  // Bug 5 (Pin piece: the Knight on c3 cannot move so the only legal move for a white Knight is g1e2)
+  a.Setup("r1bqk2r/pp1n1p2/3p4/1BpP2pp/1b2n2P/2N1P1B1/PP3PP1/R2QK1NR w KQkq - 3 12");
+  CHECK(a.ParseSAN("Ne2") == "g1e2");
+  a.Play("g1e2");
+  CHECK(a.GetFEN() == "r1bqk2r/pp1n1p2/3p4/1BpP2pp/1b2n2P/2N1P1B1/PP2NPP1/R2QK2R b KQkq - 4 12");
 }

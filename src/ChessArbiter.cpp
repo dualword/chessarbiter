@@ -488,7 +488,12 @@ std::string ChessArbiter::ParseSAN(const std::string &SANMove) {
     std::string current_src = move.substr(0, 2);
     std::string current_dst = move.substr(2, 2);
     if (current_dst == dst) {
-      src_candidates.push_back(current_src);
+      // Now ensure that move can be played
+      INIT_BACKUP();
+      if(Play(current_src+current_dst)){
+          src_candidates.push_back(current_src);
+      }
+      RESTORE_BACKUP();
     }
   }
 
