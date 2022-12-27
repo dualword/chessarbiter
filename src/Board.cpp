@@ -2,7 +2,7 @@
 
 namespace chessarbiter {
 
-bool Board::IsEmpty(std::string coord) {
+bool Board::IsEmpty(const std::string &coord) {
   for (Piece &p : pieces) {
     if (p.coord == coord) {
       return (false);
@@ -11,7 +11,7 @@ bool Board::IsEmpty(std::string coord) {
   return (true);
 }
 
-bool Board::AddPiece(char p, std::string coord) {
+bool Board::AddPiece(char p, const std::string &coord) {
   if (IsEmpty(coord)) {
     Piece piece(p, coord);
     pieces.push_back(piece);
@@ -20,7 +20,7 @@ bool Board::AddPiece(char p, std::string coord) {
   return (false);
 }
 
-bool Board::RemovePiece(std::string coord) {
+bool Board::RemovePiece(const std::string &coord) {
   for (char i = 0; i < pieces.size(); i++) {
     if (pieces[i].coord == coord) {
       pieces.erase(pieces.begin() + i);
@@ -30,7 +30,7 @@ bool Board::RemovePiece(std::string coord) {
   return false;
 }
 
-Piece Board::GetPieceAt(std::string coord) {
+Piece Board::GetPieceAt(const std::string &coord) {
   for (Piece &p : pieces) {
     if (p.coord == coord)
       return p;
@@ -71,7 +71,7 @@ std::string Board::GetKingLocation(bool isBlack) {
   throw NoPieceFound();
 }
 
-void Board::Move(std::string move) {
+void Board::Move(const std::string &move) {
   std::string src = move.substr(0, 2);
   std::string dst = move.substr(2, 2);
   RemovePiece(dst); // Remove piece on dst if exists
@@ -83,7 +83,7 @@ void Board::Move(std::string move) {
   }
 }
 
-bool Board::IsPieceMoveUnique(char piece, std::string move_dst) {
+bool Board::IsPieceMoveUnique(char piece, const std::string &move_dst) {
   bool isBlack = std::islower(piece);
   unsigned char count = 0;
   for (std::string &move : ListPossibleMoves(isBlack)) {
@@ -112,7 +112,7 @@ std::string Board::Serialize() {
   return (s);
 }
 
-bool Board::IsMovePossible(std::string move) {
+bool Board::IsMovePossible(const std::string &move) {
   std::string src = move.substr(0, 2);
   std::string dst = move.substr(2, 2);
   if (src == dst) {
