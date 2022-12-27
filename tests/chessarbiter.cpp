@@ -496,6 +496,10 @@ TEST_CASE("Specific bugs found on a game", "[BugFixes]") {
   CHECK(p == 'N');
   p=a.ParseSANPromotion("d8=B+");
   CHECK(p == 'B');
-  p=a.ParseSANPromotion("d8=R");
+  p=a.ParseSANPromotion("h1=R");
+  CHECK(p == 'R');
+  p=a.ParseSANPromotion("a1=R");
+  CHECK(p == 'R');
+  p=a.ParseSANPromotion("c1=R");
   CHECK(p == 'R');
 }

@@ -531,7 +531,7 @@ std::string ChessArbiter::ParseSAN(const std::string &SANMove) {
 }
 
 char ChessArbiter::ParseSANPromotion(const std::string &SANMove){
-  if(SANMove.length()>=4 && SANMove[0] - 'a' < 8 && SANMove[2]=='='){
+  if(SANMove.length()>=4 && SANMove[2]=='='){
     char p=SANMove[3]; // Must be upper
     if(p=='Q' || p=='R' || p=='B' || p=='N'){
       return p;
