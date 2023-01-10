@@ -178,8 +178,10 @@ bool ChessArbiter::Play(const std::string &move, char promote) {
       return (false);
     }
 
-    // Don't forget the plus sign on the SAN move
-    if(IsCheck(fen.player)){
+    // Don't forget the plus and # sign on the SAN moves
+    if(IsCheckMate()){
+      SAN+="#";
+    } else if(IsCheck(fen.player)){
       SAN+="+";
     }
 

@@ -524,4 +524,9 @@ TEST_CASE("Specific bugs found on a game", "[BugFixes]") {
   a.Play("d6d3");
   CHECK(!a.IsCheck(false));
   CHECK(a.GetSAN()=="Qd3");
+
+  // Bug 7 SAN move that lead to checkmate must have a # sign on the SAN moves
+  a.Setup("rnb1k1nr/pppp1ppp/4P3/8/1b3B2/1Nq5/PPP1PPPP/R2KNB1R b kq - 16 12");
+  a.Play("c3e1");
+  CHECK(a.GetSAN()=="Qxe1#");
 }
