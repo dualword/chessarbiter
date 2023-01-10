@@ -178,13 +178,6 @@ bool ChessArbiter::Play(const std::string &move, char promote) {
       return (false);
     }
 
-    // Don't forget the plus and # sign on the SAN moves
-    if(IsCheckMate()){
-      SAN+="#";
-    } else if(IsCheck(fen.player)){
-      SAN+="+";
-    }
-
     // Update position map (repetitions draw)
     if (positions.count(fen.board) == 0) {
       positions[fen.board] = 1;
@@ -434,7 +427,16 @@ bool ChessArbiter::IsCheckMate() {
   return (false);
 }
 
-std::string ChessArbiter::GetSAN() { return (SAN); }
+std::string ChessArbiter::GetSAN() {
+  // Don't forget the plus and # sign on the SAN moves
+  if(IsCheckMate()){
+    return SAN+"#";
+  } else if(IsCheck(fen.player)){
+    return SAN+ "+";
+  }
+  return SAN;
+}
+
 char ChessArbiter::GetCapture() { return (capture); }
 
 std::string ChessArbiter::ParseSAN(const std::string &SANMove) {
