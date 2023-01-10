@@ -485,12 +485,14 @@ TEST_CASE("Specific bugs found on a game", "[BugFixes]") {
   a.Play("d7d8");
   CHECK(a.GetFEN() == "3Q4/k7/2p1ppp1/5qBp/5P1P/8/6PK/8 b - - 0 45");
   CHECK(a.WasPawnPromotion());
+  CHECK(a.GetSAN()=="d8=Q");
 
   // BUG 3 (Promotion)
   a.Setup("8/k2P4/2p1ppp1/5qBp/5P1P/8/6PK/8 w - - 0 45");
   a.Play("d7d8",'n');
   CHECK(a.GetFEN() == "3N4/k7/2p1ppp1/5qBp/5P1P/8/6PK/8 b - - 0 45");
   CHECK(a.WasPawnPromotion());
+  CHECK(a.GetSAN()=="d8=N");
 
   // BUG 4 (Promotion)
   char p=a.ParseSANPromotion("d8=Q");
