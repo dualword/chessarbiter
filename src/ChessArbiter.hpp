@@ -33,7 +33,7 @@ class ChessArbiter {
   void SetFEN(const FEN &fen);
   std::string SAN, SAN_last;
   char capture;
-  bool was_enpassant;
+  bool was_enpassant, was_pawn_promotion;
 
 public:
   ChessArbiter();
@@ -69,6 +69,7 @@ public:
   bool IsDrawByRepetitions();
   bool IsDraw();
   bool WasEnPassant();
+  bool WasPawnPromotion();
   std::string ParseSAN(const std::string &SANMove);
   char ParseSANPromotion(const std::string &SANMove);
 };

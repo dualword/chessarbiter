@@ -3,7 +3,7 @@
 namespace chessarbiter {
 ChessArbiter::ChessArbiter()
     : wPawn(1), wRook(5), wKnight(3), wBishop(3), wQueen(9), wKing(0), SAN(""),
-      capture(' '), was_enpassant(false) {
+      capture(' '), was_enpassant(false), was_pawn_promotion(false) {
   Setup("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
 }
 
@@ -51,6 +51,7 @@ bool ChessArbiter::Play(const std::string &move, char promote) {
     SAN = "";
     capture = ' ';
     was_enpassant=false;
+    was_pawn_promotion=false;
 
     if (IsCapture) {
       capture = board.GetPieceAt(dst).piece;
@@ -131,10 +132,12 @@ bool ChessArbiter::Play(const std::string &move, char promote) {
         board.RemovePiece(dst);
         board.AddPiece(tolower(promote),dst);
         SAN+="="+toupper(promote);
+        was_pawn_promotion=true;
       } else if(dst[1]=='8'){
         board.RemovePiece(dst);
         board.AddPiece(toupper(promote),dst);
         SAN+="="+toupper(promote);
+        was_pawn_promotion=true;
       }
     }
     // Captures reset half moves
@@ -188,6 +191,8 @@ bool ChessArbiter::Play(const std::string &move, char promote) {
 }
 
 bool ChessArbiter::WasEnPassant() { return (was_enpassant); }
+
+bool ChessArbiter::WasPawnPromotion() { return (was_pawn_promotion); };
 
 bool ChessArbiter::IsAttacked(const std::string &square, bool by) {
   std::vector<std::string> moves = board.ListPossibleMoves(by);

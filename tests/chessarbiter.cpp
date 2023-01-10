@@ -478,16 +478,19 @@ TEST_CASE("Specific bugs found on a game", "[BugFixes]") {
   a.Setup("1k3r1r/npqbbp2/4p1p1/p2pPnNp/1P3B1P/P1PB4/5PPQ/RN2R1K1 w - - 1 19");
   a.Play("e1c1");
   CHECK(a.GetFEN() == "1k3r1r/npqbbp2/4p1p1/p2pPnNp/1P3B1P/P1PB4/5PPQ/RNR3K1 b - - 2 19");
+  CHECK(!a.WasPawnPromotion());
 
   // BUG 2 (Promotion)
   a.Setup("8/k2P4/2p1ppp1/5qBp/5P1P/8/6PK/8 w - - 0 45");
   a.Play("d7d8");
   CHECK(a.GetFEN() == "3Q4/k7/2p1ppp1/5qBp/5P1P/8/6PK/8 b - - 0 45");
+  CHECK(a.WasPawnPromotion());
 
   // BUG 3 (Promotion)
   a.Setup("8/k2P4/2p1ppp1/5qBp/5P1P/8/6PK/8 w - - 0 45");
   a.Play("d7d8",'n');
   CHECK(a.GetFEN() == "3N4/k7/2p1ppp1/5qBp/5P1P/8/6PK/8 b - - 0 45");
+  CHECK(a.WasPawnPromotion());
 
   // BUG 4 (Promotion)
   char p=a.ParseSANPromotion("d8=Q");
