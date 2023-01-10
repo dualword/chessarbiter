@@ -513,4 +513,15 @@ TEST_CASE("Specific bugs found on a game", "[BugFixes]") {
   CHECK(a.ParseSAN("Ne2") == "g1e2");
   a.Play("g1e2");
   CHECK(a.GetFEN() == "r1bqk2r/pp1n1p2/3p4/1BpP2pp/1b2n2P/2N1P1B1/PP2NPP1/R2QK2R b KQkq - 4 12");
+
+  // Bug 6 SAN move that lead to check must have a + sign on the SAN moves
+  a.Setup("rnb1kbnr/pppp1ppp/3qP3/8/8/8/PPP1PPPP/RNB1KBNR b KQkq - 0 4");
+  a.Play("d6d1");
+  CHECK(a.IsCheck(false));
+  CHECK(!a.IsCheck(!false));
+  CHECK(a.GetSAN()=="Qd1+");
+  a.Setup("rnb1kbnr/pppp1ppp/3qP3/8/8/8/PPP1PPPP/RNB1KBNR b KQkq - 0 4");
+  a.Play("d6d3");
+  CHECK(!a.IsCheck(false));
+  CHECK(a.GetSAN()=="Qd3");
 }

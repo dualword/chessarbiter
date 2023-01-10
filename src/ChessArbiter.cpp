@@ -178,6 +178,11 @@ bool ChessArbiter::Play(const std::string &move, char promote) {
       return (false);
     }
 
+    // Don't forget the plus sign on the SAN move
+    if(IsCheck(fen.player)){
+      SAN+="+";
+    }
+
     // Update position map (repetitions draw)
     if (positions.count(fen.board) == 0) {
       positions[fen.board] = 1;
