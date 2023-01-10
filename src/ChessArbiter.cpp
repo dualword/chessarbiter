@@ -429,10 +429,10 @@ bool ChessArbiter::IsCheckMate() {
 
 std::string ChessArbiter::GetSAN() {
   // Don't forget the plus and # sign on the SAN moves
-  if(IsCheckMate()){
-    return SAN+"#";
-  } else if(IsCheck(fen.player)){
-    return SAN+ "+";
+  if(IsCheck(fen.player)){
+    if(IsCheckMate())
+      return SAN+"#";
+    return SAN+'+';
   }
   return SAN;
 }
